@@ -64,7 +64,7 @@ export default async function ProfileDetailPage({params}: {params: {locale: stri
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h1 className="truncate text-2xl font-black">{profile.name}</h1>
+              <h1 className="truncate text-2xl font-bold">{profile.name}</h1>
               <span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-bold text-emerald-700">{profile.confidence >= 82 ? '中风险' : '低风险'}</span>
             </div>
             <p className="mt-2 truncate text-sm text-slate-500">{[profile.ageRange, profile.job, profile.city].filter(Boolean).join(' · ')}</p>
@@ -73,7 +73,7 @@ export default async function ProfileDetailPage({params}: {params: {locale: stri
           <div className="rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-sm">
             <div className="text-xs font-semibold text-slate-500">综合财富信心</div>
             <div className="mt-1 flex items-center justify-center gap-1">
-              <span className="text-2xl font-black">{profile.confidence}%</span>
+              <span className="text-2xl font-bold">{profile.confidence}%</span>
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white">
                 <ArrowUp className="h-3 w-3" />
               </span>
@@ -110,7 +110,7 @@ export default async function ProfileDetailPage({params}: {params: {locale: stri
                 <Icon className={cn('mx-auto h-7 w-7', color)} />
                 <div className="mt-1 truncate text-xs font-semibold text-slate-600">{name}</div>
                 <div className="text-[11px] text-slate-400">{sub}</div>
-                <div className="mt-1 text-base font-black">{count}</div>
+                <div className="mt-1 text-base font-bold">{count}</div>
               </div>
             ))}
           </div>
@@ -128,18 +128,18 @@ export default async function ProfileDetailPage({params}: {params: {locale: stri
           <div className="grid grid-cols-[145px_1fr] items-end gap-3">
             <div>
               <div className="text-sm text-slate-500">5年后净资产预计</div>
-              <div className="mt-2 text-2xl font-black">{shortYuan(netAsset + 1200000)}</div>
-              <div className="mt-3 inline-flex rounded-full bg-violet-50 px-3 py-1 text-sm font-black text-violet-600">年化增长率 7.3%</div>
+              <div className="mt-2 text-2xl font-bold">{shortYuan(netAsset + 1200000)}</div>
+              <div className="mt-3 inline-flex rounded-full bg-violet-50 px-3 py-1 text-sm font-bold text-violet-600">年化增长率 7.3%</div>
             </div>
             <ForecastAreaChart snapshots={snapshots} />
           </div>
         </Panel>
 
         <div className="mt-4 grid grid-cols-2 gap-3">
-          <Link href={`${prefix}/profiles/${profile.id}/clues/new`} className="flex h-12 items-center justify-center rounded-xl bg-primary text-base font-black text-white shadow-[0_12px_26px_rgba(40,120,255,0.25)]">
+          <Link href={`${prefix}/profiles/${profile.id}/clues/new`} className="flex h-12 items-center justify-center rounded-xl bg-primary text-base font-bold text-white shadow-[0_12px_26px_rgba(40,120,255,0.25)]">
             添加线索
           </Link>
-          <Link href={`${prefix}/profiles/${profile.id}/edit`} className="flex h-12 items-center justify-center rounded-xl bg-slate-100 text-base font-black text-slate-700">
+          <Link href={`${prefix}/profiles/${profile.id}/edit`} className="flex h-12 items-center justify-center rounded-xl bg-slate-100 text-base font-bold text-slate-700">
             编辑判断
           </Link>
         </div>
@@ -154,7 +154,7 @@ function TopBar({backHref, title}: {backHref: string; title: string}) {
       <Link href={backHref} className="flex h-11 w-11 items-center justify-center rounded-full text-slate-950">
         <ArrowLeft className="h-7 w-7" />
       </Link>
-      <div className="text-center text-xl font-black">{title}</div>
+      <div className="text-center text-xl font-bold">{title}</div>
       <button className="flex h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white" type="button">
         <CircleEllipsis className="h-6 w-6" />
         <span className="h-5 w-px bg-slate-200" />
@@ -170,10 +170,10 @@ function Panel({title, icon, subtitle, badge, action, children}: {title: string;
       <div className="mb-4 flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
           {icon}
-          <h2 className="truncate text-lg font-black">{title}</h2>
+          <h2 className="truncate text-lg font-bold">{title}</h2>
           {subtitle ? <span className="truncate text-sm font-semibold text-slate-400">（{subtitle}）</span> : null}
         </div>
-        {badge ? <span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-black text-emerald-600">{badge}</span> : null}
+        {badge ? <span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-bold text-emerald-600">{badge}</span> : null}
         {action ? <ChevronRight className="h-6 w-6 shrink-0 text-slate-950" /> : null}
       </div>
       {children}
@@ -194,7 +194,7 @@ function JudgeMetric({icon, label, value, tone}: {icon: ReactNode; label: string
         <span className={cn('[&>svg]:h-5 [&>svg]:w-5', toneClass)}>{icon}</span>
         <span className="truncate">{label}</span>
       </div>
-      <div className="mt-2 truncate text-xl font-black">{value}</div>
+      <div className="mt-2 truncate text-xl font-bold">{value}</div>
     </div>
   )
 }
@@ -215,12 +215,12 @@ function AbilityCard({icon, title, value, label, status, tone, active}: {icon: R
     <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-panel">
       <div className="flex items-center gap-2">
         <span className={cn('flex h-8 w-8 shrink-0 items-center justify-center rounded-lg [&>svg]:h-5 [&>svg]:w-5', toneClass)}>{icon}</span>
-        <div className="truncate text-sm font-black">{title}</div>
+        <div className="truncate text-sm font-bold">{title}</div>
       </div>
-      <div className="mt-3 truncate text-lg font-black">{value}</div>
+      <div className="mt-3 truncate text-lg font-bold">{value}</div>
       <div className="mt-4 flex items-center justify-between gap-2 text-xs">
         <span className="truncate text-slate-500">{label}</span>
-        <span className={cn('shrink-0 font-black', tone === 'orange' ? 'text-orange-500' : 'text-emerald-600')}>{status}</span>
+        <span className={cn('shrink-0 font-bold', tone === 'orange' ? 'text-orange-500' : 'text-emerald-600')}>{status}</span>
       </div>
       <div className="mt-3 flex gap-1">
         {[0, 1, 2, 3, 4].map((item) => (

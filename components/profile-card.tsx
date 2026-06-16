@@ -57,7 +57,7 @@ export function ProfileCard({
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <h2 className="truncate text-xl font-black tracking-normal text-slate-950">{profile.name}</h2>
+                  <h2 className="truncate text-xl font-bold tracking-normal text-slate-950">{profile.name}</h2>
                   <span className="shrink-0 text-sm font-medium text-slate-500">{profile.ageRange}</span>
                 </div>
                 <p className="mt-1 truncate text-sm text-slate-500">
@@ -83,10 +83,10 @@ export function ProfileCard({
 
         <div className="grid grid-cols-2 border-b border-slate-200 py-3 text-sm">
           <div className="font-medium text-slate-500">
-            月收入 <span className="ml-2 font-black text-slate-950">{yuan(profile.monthlyIncome)}</span>
+            月收入 <span className="ml-2 font-bold text-slate-950">{yuan(profile.monthlyIncome)}</span>
           </div>
           <div className="font-medium text-slate-500">
-            月支出 <span className="ml-2 font-black text-slate-950">{yuan(profile.monthlyExpense)}</span>
+            月支出 <span className="ml-2 font-bold text-slate-950">{yuan(profile.monthlyExpense)}</span>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ export function ProfileCard({
                     <Icon className="h-5 w-5" />
                   </span>
                   <div className="min-w-0">
-                    <div className="truncate text-sm font-black">{item.name}</div>
+                    <div className="truncate text-sm font-bold">{item.name}</div>
                     <div className="truncate text-sm font-semibold text-slate-700">{yuan(item.amount)}</div>
                   </div>
                 </div>
@@ -123,7 +123,7 @@ export function ProfileCard({
           <div className="text-sm font-medium text-slate-500">5年预测（净资产）</div>
           <TrendLine snapshots={fallbackSnapshots as Snapshot[]} />
           <div className="text-right text-sm font-medium text-slate-500">
-            目标 <span className="ml-1 text-base font-black text-slate-950">{shortYuan(netAsset + 1200000)}</span>
+            目标 <span className="ml-1 text-base font-bold text-slate-950">{shortYuan(netAsset + 1200000)}</span>
           </div>
           <ArrowRight className="h-5 w-5 text-slate-400" />
         </div>
@@ -136,7 +136,7 @@ function Metric({label, value, positive}: {label: string; value: string; positiv
   return (
     <div className="min-w-0 border-r border-slate-200 px-2 last:border-r-0 first:pl-0 last:pr-0">
       <div className="truncate text-xs font-semibold text-slate-500">{label}</div>
-      <div className={cn('mt-1 truncate text-xl font-black', positive && 'text-emerald-600')}>{value}</div>
+      <div className={cn('mt-1 truncate text-xl font-bold', positive && 'text-emerald-600')}>{value}</div>
     </div>
   )
 }

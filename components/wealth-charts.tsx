@@ -42,7 +42,7 @@ export function AssetDonut({items, total}: {items: MoneyItem[]; total: number}) 
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
           <span className="text-[11px] font-medium text-slate-500">总资产</span>
-          <span className="mt-1 text-base font-black text-slate-950">{shortYuan(total)}</span>
+          <span className="mt-1 text-base font-bold text-slate-950">{shortYuan(total)}</span>
         </div>
       </div>
       <div className="space-y-3">

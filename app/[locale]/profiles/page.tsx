@@ -18,8 +18,8 @@ export default async function ProfilesPage({params}: {params: {locale: string}})
         <div className="rounded-[34px] bg-white px-4 pb-5 pt-5 shadow-[0_20px_80px_rgba(15,23,42,0.08)]">
           <header className="flex items-start justify-between">
             <div>
-              <div className="text-[15px] font-black text-slate-950">9:41</div>
-              <h1 className="mt-9 text-[28px] font-black tracking-normal text-slate-950">财富档案</h1>
+              <div className="text-[15px] font-bold text-slate-950">9:41</div>
+              <h1 className="mt-9 text-[28px] font-bold tracking-normal text-slate-950">财富档案</h1>
               <p className="mt-2 text-base font-medium text-slate-500">洞察财富全貌，AI 助你决策更智慧</p>
             </div>
             <button className="mt-12 flex h-14 w-14 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-950 shadow-sm" type="button" aria-label="新增档案">
@@ -34,7 +34,7 @@ export default async function ProfilesPage({params}: {params: {locale: string}})
           </section>
 
           <section className="mt-6 flex items-center gap-2">
-            <button className="rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-black text-primary" type="button">最近更新</button>
+            <button className="rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-bold text-primary" type="button">最近更新</button>
             <button className="rounded-full bg-slate-50 px-4 py-2 text-sm font-bold text-slate-600" type="button">总资产最高</button>
             <button className="rounded-full bg-slate-50 px-4 py-2 text-sm font-bold text-slate-600" type="button">负债最高</button>
             <button className="ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white" type="button" aria-label="筛选">
@@ -90,9 +90,9 @@ function SummaryCard({
         <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl', toneClass)}>{icon}</span>
         <span className="min-w-0 truncate text-sm font-semibold text-slate-500">{label}</span>
       </div>
-      <div className="mt-4 truncate text-xl font-black text-slate-950">{value}</div>
+      <div className="mt-4 truncate text-xl font-bold text-slate-950">{value}</div>
       <div className="mt-2 truncate text-sm font-medium text-slate-500">
-        {sub} <span className={cn('font-black', delta.startsWith('-') ? 'text-emerald-600' : 'text-emerald-600')}>{delta}</span>
+        {sub} <span className={cn('font-bold', delta.startsWith('-') ? 'text-emerald-600' : 'text-emerald-600')}>{delta}</span>
       </div>
     </div>
   )

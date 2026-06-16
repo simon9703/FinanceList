@@ -29,8 +29,8 @@ export default async function EditProfilePage({params}: {params: {locale: string
         <TopBar backHref={`${prefix}/profiles/${params.id}`} title="编辑当前判断" />
 
         <section className="mt-7 grid grid-cols-2 rounded-full bg-slate-100 p-1">
-          <button className="h-12 rounded-full bg-white text-lg font-black text-primary shadow-sm" type="button">简单模式</button>
-          <button className="h-12 rounded-full text-lg font-black text-slate-500" type="button">专业模式</button>
+          <button className="h-12 rounded-full bg-white text-lg font-bold text-primary shadow-sm" type="button">简单模式</button>
+          <button className="h-12 rounded-full text-lg font-bold text-slate-500" type="button">专业模式</button>
         </section>
 
         <Group
@@ -73,7 +73,7 @@ export default async function EditProfilePage({params}: {params: {locale: string
           centerAction
         />
 
-        <Button size="lg" className="mt-7 h-14 w-full rounded-2xl text-xl font-black shadow-[0_14px_28px_rgba(40,120,255,0.28)]">
+        <Button size="lg" className="mt-7 h-14 w-full rounded-2xl text-xl font-bold shadow-[0_14px_28px_rgba(40,120,255,0.28)]">
           保存并更新判断
         </Button>
         <div className="mt-4 text-center text-base font-medium text-slate-400">下次评估将基于更新后的数据</div>
@@ -88,7 +88,7 @@ function TopBar({backHref, title}: {backHref: string; title: string}) {
       <Link href={backHref} className="flex h-11 w-11 items-center justify-center rounded-full text-slate-950">
         <ArrowLeft className="h-7 w-7" />
       </Link>
-      <div className="text-center text-xl font-black">{title}</div>
+      <div className="text-center text-xl font-bold">{title}</div>
       <button className="flex h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white" type="button">
         <CircleEllipsis className="h-6 w-6" />
         <span className="h-5 w-px bg-slate-200" />
@@ -124,13 +124,13 @@ function Group({
       <div className="mb-5 flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <span className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-full [&>svg]:h-6 [&>svg]:w-6', iconClass)}>{icon}</span>
-          <h2 className="truncate text-2xl font-black">
+          <h2 className="truncate text-2xl font-bold">
             {title}
             <span className="ml-2 text-base font-semibold text-slate-400">（{monthly ? '月均' : '总计'} {yuan(total)}）</span>
           </h2>
         </div>
         {!centerAction ? (
-          <button className="shrink-0 text-base font-black text-primary" type="button">
+          <button className="shrink-0 text-base font-bold text-primary" type="button">
             + {action}
           </button>
         ) : null}
@@ -154,7 +154,7 @@ function Group({
       </div>
 
       {centerAction ? (
-        <button className="mx-auto mt-5 flex items-center gap-1 text-base font-black text-primary" type="button">
+        <button className="mx-auto mt-5 flex items-center gap-1 text-base font-bold text-primary" type="button">
           <Plus className="h-5 w-5" />
           {action}
         </button>

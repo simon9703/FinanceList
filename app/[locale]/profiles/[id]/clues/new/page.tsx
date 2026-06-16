@@ -59,7 +59,7 @@ export default async function NewCluePage({params}: {params: {locale: string; id
               <button
                 key={tab.label}
                 className={cn(
-                  'flex h-11 shrink-0 items-center gap-2 rounded-full px-4 text-base font-black',
+                  'flex h-11 shrink-0 items-center gap-2 rounded-full px-4 text-base font-bold',
                   index === 0 ? 'bg-primary text-white shadow-[0_10px_20px_rgba(40,120,255,0.22)]' : 'bg-slate-50 text-slate-600'
                 )}
                 type="button"
@@ -95,7 +95,7 @@ export default async function NewCluePage({params}: {params: {locale: string; id
           </div>
         </section>
 
-        <Button size="lg" className="mt-6 h-14 w-full rounded-2xl text-xl font-black shadow-[0_14px_28px_rgba(40,120,255,0.28)]">
+        <Button size="lg" className="mt-6 h-14 w-full rounded-2xl text-xl font-bold shadow-[0_14px_28px_rgba(40,120,255,0.28)]">
           <Sparkles className="h-6 w-6" />
           AI解析
         </Button>
@@ -103,10 +103,10 @@ export default async function NewCluePage({params}: {params: {locale: string; id
         <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <h2 className="text-lg font-black">解析结果</h2>
+              <h2 className="text-lg font-bold">解析结果</h2>
               <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-bold text-slate-500">已识别 {parsed.length} 条线索</span>
             </div>
-            <div className="flex items-center gap-1 text-sm font-black text-emerald-600">
+            <div className="flex items-center gap-1 text-sm font-bold text-emerald-600">
               <CheckCircle2 className="h-5 w-5" />
               整体置信度：92%
             </div>
@@ -123,16 +123,16 @@ export default async function NewCluePage({params}: {params: {locale: string; id
                   </span>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <div className="truncate text-lg font-black">{item.item}</div>
-                      <span className={cn('shrink-0 rounded-md px-2 py-1 text-xs font-black', meta.badgeClass)}>{meta.label}</span>
+                      <div className="truncate text-lg font-bold">{item.item}</div>
+                      <span className={cn('shrink-0 rounded-md px-2 py-1 text-xs font-bold', meta.badgeClass)}>{meta.label}</span>
                     </div>
                     <div className="mt-2 truncate text-sm text-slate-500">{item.explanation}</div>
                   </div>
-                  <div className="text-right text-xl font-black">
+                  <div className="text-right text-xl font-bold">
                     {item.amount ? yuan(item.amount) : item.amountText}
                     <span className="ml-1 text-sm font-medium text-slate-500">元</span>
                   </div>
-                  <span className={cn('rounded-lg px-2 py-1 text-center text-sm font-black', meta.confidenceClass)}>{item.confidence === 'high' ? '95%' : '90%'}</span>
+                  <span className={cn('rounded-lg px-2 py-1 text-center text-sm font-bold', meta.confidenceClass)}>{item.confidence === 'high' ? '95%' : '90%'}</span>
                 </div>
               )
             })}
@@ -141,7 +141,7 @@ export default async function NewCluePage({params}: {params: {locale: string; id
           <div className="mt-4 text-center text-sm font-medium text-slate-400">解析结果由 AI 生成，请确认后保存</div>
         </section>
 
-        <Button size="lg" className="mt-6 h-14 w-full rounded-2xl text-xl font-black shadow-[0_14px_28px_rgba(40,120,255,0.28)]">
+        <Button size="lg" className="mt-6 h-14 w-full rounded-2xl text-xl font-bold shadow-[0_14px_28px_rgba(40,120,255,0.28)]">
           保存到线索列表
         </Button>
         <div className="mt-3 text-center text-sm text-slate-400">{profile?.name ?? '档案'} · 保存后将用于下一次判断</div>
@@ -156,7 +156,7 @@ function TopBar({backHref, title}: {backHref: string; title: string}) {
       <Link href={backHref} className="flex h-11 w-11 items-center justify-center rounded-full text-slate-950">
         <ArrowLeft className="h-7 w-7" />
       </Link>
-      <div className="text-center text-xl font-black">{title}</div>
+      <div className="text-center text-xl font-bold">{title}</div>
       <button className="flex h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white" type="button">
         <CircleEllipsis className="h-6 w-6" />
         <span className="h-5 w-px bg-slate-200" />
