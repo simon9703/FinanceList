@@ -1,5 +1,5 @@
 import {nanoid} from './simple-id'
-import {demoClues, demoMoneyItems, demoProfile, demoSnapshots, demoUserId} from './demo-data'
+import {demoClues, demoMoneyItems, demoProfiles, demoSnapshots, demoUserId} from './demo-data'
 import {createSupabaseServerClient, hasSupabaseEnv} from './supabase/server'
 import {parseClueWithAi} from './ai'
 import type {Clue, MoneyItem, Profile, ProfileDetail, Snapshot} from './types'
@@ -100,7 +100,7 @@ async function getCurrentUserId() {
 
 export async function listProfiles(): Promise<Profile[]> {
   const userId = await getCurrentUserId()
-  if (!hasSupabaseEnv()) return [demoProfile].filter((item) => item.userId === userId)
+  if (!hasSupabaseEnv()) return demoProfiles.filter((item) => item.userId === userId)
   if (!userId) return []
 
   const supabase = createSupabaseServerClient()
@@ -117,7 +117,7 @@ export async function listProfiles(): Promise<Profile[]> {
 export async function getProfileDetail(id: string): Promise<ProfileDetail | null> {
   const userId = await getCurrentUserId()
   if (!hasSupabaseEnv()) {
-    const profile = demoProfile.id === id && demoProfile.userId === userId ? demoProfile : null
+    const profile = demoProfiles.find((item) => item.id === id && item.userId === userId) ?? null
     if (!profile) return null
     return {
       profile,
