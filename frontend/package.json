@@ -1,4 +1,6 @@
 {
+  "name": "finance-list-frontend",
+  "private": true,
   "scripts": {
     "postinstall": "weapp-tw patch",
     "dev:h5": "taro build --type h5 --watch",

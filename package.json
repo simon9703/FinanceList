@@ -1,11 +1,11 @@
 {
   "private": true,
-  "workspaces": ["frontend", "backend"],
+  "packageManager": "pnpm@8.7.6",
   "scripts": {
-    "dev:frontend:weapp": "npm --workspace frontend run dev:weapp",
-    "build:frontend:weapp": "npm --workspace frontend run build:weapp",
-    "typecheck:frontend": "npm --workspace frontend run typecheck",
-    "dev:backend": "npm --workspace backend run dev",
-    "typecheck:backend": "npm --workspace backend run typecheck"
+    "dev:frontend:weapp": "pnpm --filter finance-list-frontend dev:weapp",
+    "build:frontend:weapp": "pnpm --filter finance-list-frontend build:weapp",
+    "typecheck:frontend": "pnpm --filter finance-list-frontend typecheck",
+    "dev:backend": "pnpm --filter finance-list-backend dev",
+    "typecheck:backend": "pnpm --filter finance-list-backend typecheck"
   }
 }
