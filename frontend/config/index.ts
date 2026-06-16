@@ -1,4 +1,5 @@
 import { defineConfig } from '@tarojs/cli'
+import { UnifiedWebpackPluginV5 } from 'weapp-tailwindcss/webpack'
 
 export default defineConfig({
   projectName: 'FinanceList',
@@ -9,6 +10,17 @@ export default defineConfig({
   outputRoot: 'dist',
   framework: 'react',
   compiler: 'webpack5',
-  mini: {},
+  mini: {
+    webpackChain(chain: any) {
+      chain.merge({
+        plugin: {
+          install: {
+            plugin: UnifiedWebpackPluginV5,
+            args: [{ appType: 'taro', rem2rpx: true }],
+          },
+        },
+      })
+    },
+  },
   h5: {},
 })

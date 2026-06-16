@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, View } from '@tarojs/components'
+import { card, panelHead, panelHint, panelRow, panelSuffix, panelTitle, panelValue } from './ui'
 
 export type InfoRow = {
   label: string
@@ -8,15 +9,15 @@ export type InfoRow = {
 }
 
 export function InfoPanel({ title, rows, suffix }: { title: string; rows: InfoRow[]; suffix?: string }) {
-  return <View className='info-panel'>
-    <View className='panel-head'>
-      <Text className='panel-title'>{title}</Text>
-      {suffix ? <Text className='panel-suffix'>{suffix}</Text> : null}
+  return <View className={card}>
+    <View className={panelHead}>
+      <Text className={panelTitle}>{title}</Text>
+      {suffix ? <Text className={panelSuffix}>{suffix}</Text> : null}
     </View>
-    {rows.map((row) => <View key={row.label} className='panel-row'>
-      <Text className='panel-label'>{row.label}</Text>
-      <Text className='panel-value'>{row.value}</Text>
-      {row.hint ? <Text className='panel-hint'>{row.hint}</Text> : null}
+    {rows.map((row) => <View key={row.label} className={panelRow}>
+      <Text className='text-[24px] text-[#89919d]'>{row.label}</Text>
+      <Text className={panelValue}>{row.value}</Text>
+      {row.hint ? <Text className={panelHint}>{row.hint}</Text> : null}
     </View>)}
   </View>
 }
