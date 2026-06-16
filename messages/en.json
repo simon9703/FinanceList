@@ -1,0 +1,31 @@
+{
+  "Common": {
+    "appName": "FinanceList",
+    "profiles": "Profiles",
+    "newProfile": "New profile",
+    "searchPlaceholder": "Search people",
+    "recentUpdated": "Recently updated",
+    "totalProfiles": "Profiles",
+    "monitoring": "Monitoring",
+    "alerts": "Alerts",
+    "back": "Back",
+    "details": "Profile details",
+    "notFound": "Profile not found"
+  },
+  "Profile": {
+    "assets": "Assets",
+    "debt": "Debt",
+    "income": "Monthly income",
+    "expense": "Monthly expense",
+    "confidence": "Confidence",
+    "assetStructure": "Asset structure",
+    "incomeAbility": "Income",
+    "expensePressure": "Expenses",
+    "clues": "Clues",
+    "snapshots": "Snapshots",
+    "addClue": "Add clue",
+    "editProfile": "Edit profile",
+    "unit": "0k",
+    "emptyHint": "No data yet"
+  }
+}

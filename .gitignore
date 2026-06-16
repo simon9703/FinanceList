@@ -6,7 +6,7 @@ dist/
 build/
 .next/
 out/
-.taro/
+.pnpm-store/
 
 # Taro mini program output
 frontend/dist/

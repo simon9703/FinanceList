@@ -1,0 +1,31 @@
+{
+  "Common": {
+    "appName": "FinanceList",
+    "profiles": "档案",
+    "newProfile": "新建档案",
+    "searchPlaceholder": "搜索人物",
+    "recentUpdated": "最近更新",
+    "totalProfiles": "全部档案",
+    "monitoring": "监控中",
+    "alerts": "预警",
+    "back": "返回",
+    "details": "档案详情",
+    "notFound": "没有找到档案"
+  },
+  "Profile": {
+    "assets": "总资产",
+    "debt": "总负债",
+    "income": "月收入",
+    "expense": "月支出",
+    "confidence": "可信度",
+    "assetStructure": "资产结构",
+    "incomeAbility": "收入能力",
+    "expensePressure": "支出压力",
+    "clues": "线索列表",
+    "snapshots": "历史快照",
+    "addClue": "添加线索",
+    "editProfile": "编辑判断",
+    "unit": "万",
+    "emptyHint": "暂无数据"
+  }
+}
