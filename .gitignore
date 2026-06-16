@@ -21,8 +21,8 @@ pnpm-debug.log*
 
 # Environment files
 .env
-.env.*
-!.env.example
+.env
+!.env
 !.env.local.example
 
 # TypeScript
@@ -37,3 +37,6 @@ Thumbs.db
 # Cache
 .cache/
 .eslintcache
+
+.vercel
+.env*

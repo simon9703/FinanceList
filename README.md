@@ -18,6 +18,10 @@ FinanceList is now a single Next.js full-stack app. It uses the App Router for p
 ```bash
 pnpm install
 pnpm dev
+
+before run dev, if you want to get postgres config. use vercel command update environment config
+vercel link
+vercel env pull .env.development.local
 ```
 
 Create `.env.local` from `.env.example` and set Supabase values. Without Supabase env vars, the app falls back to demo data so the UI and API can run locally.

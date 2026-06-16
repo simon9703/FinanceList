@@ -65,6 +65,7 @@ create table if not exists wealth_snapshot (
   created_at timestamptz not null default now()
 );
 
+alter table app_user enable row level security;
 alter table wealth_profile enable row level security;
 alter table money_item enable row level security;
 alter table clue enable row level security;
