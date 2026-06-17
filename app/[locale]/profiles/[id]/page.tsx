@@ -17,6 +17,7 @@ import {
   WalletCards,
 } from 'lucide-react'
 import {AssetDonut, ForecastAreaChart, JudgmentLineChart} from '@/components/wealth-charts'
+import {ProfileDetailPcPage} from '@/components/pages/profile-detail/pc'
 import {getProfileDetail} from '@/lib/repository'
 import {cn} from '@/lib/utils'
 import {shortYuan, yuan} from '@/lib/format'
@@ -54,8 +55,10 @@ export default async function ProfileDetailPage({params}: {params: {locale: stri
   const monthlySurplus = profile.monthlyIncome - profile.monthlyExpense
 
   return (
-    <main className="min-h-screen bg-[#f7faff] px-4 py-6">
-      <div className="mx-auto w-full max-w-[430px] rounded-[34px] bg-white px-4 pb-5 pt-5 shadow-[0_20px_80px_rgba(15,23,42,0.08)]">
+    <main className="min-h-screen bg-[#f7faff]">
+      <ProfileDetailPcPage profile={profile} moneyItems={moneyItems} clues={clues} snapshots={snapshots} prefix={prefix} />
+      <section className="w-full px-4 py-6 lg:hidden">
+      <div className="w-full rounded-[34px] bg-white px-4 pb-5 pt-5 shadow-[0_20px_80px_rgba(15,23,42,0.08)]">
         <TopBar backHref={`${prefix}/profiles`} title="档案详情" />
 
         <section className="mt-7 grid grid-cols-[82px_1fr_116px] items-center gap-3">
@@ -144,6 +147,7 @@ export default async function ProfileDetailPage({params}: {params: {locale: stri
           </Link>
         </div>
       </div>
+      </section>
     </main>
   )
 }
