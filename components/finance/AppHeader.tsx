@@ -2,7 +2,7 @@ import Link from 'next/link'
 import {ShieldCheck} from 'lucide-react'
 
 const nav = [
-  ['/', '首页'], ['/modules/buy_rent', '买房租房'], ['/modules/investment', '投资协助'], ['/modules/living_cost', '城市成本'], ['/modules/retirement', '退休计划'], ['/modules/personal', '个人资产']
+  ['/', '首页'], ['/buy-rent', '买房租房'], ['/investment', '投资协助'], ['/living-cost', '城市成本'], ['/retirement', '退休计划'], ['/personal-asset', '个人资产']
 ]
 
 export function AppHeader() {
