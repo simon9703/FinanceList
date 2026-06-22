@@ -1,35 +1,14 @@
 # FinanceList
 
-FinanceList is now a single Next.js full-stack app. It uses the App Router for pages and API routes, Tailwind CSS plus shadcn/ui-style components for the mobile-first UI, next-intl for `zh-CN` and `en`, and Supabase PostgreSQL/Auth for production data.
+财富侦探 mock app。所有页面统一放在 locale 路由下，并为每个页面保留相邻的 `page.md` 说明文件。
 
-## Routes
+页面入口：
 
-- `/profiles`
-- `/profiles/[id]`
-- `/en/profiles`
-- `/en/profiles/[id]`
-- `/api/profiles`
-- `/api/profiles/[id]`
-- `/api/clues`
-- `/api/ai/parse-clue`
+- `/zh-CN`
+- `/zh-CN/buy-rent`
+- `/zh-CN/investment`
+- `/zh-CN/living-cost`
+- `/zh-CN/retirement`
+- `/zh-CN/personal-asset`
 
-## Development
-
-```bash
-pnpm install
-pnpm dev
-
-before run dev, if you want to get postgres config. use vercel command update environment config
-vercel link
-vercel env pull .env.development.local
-```
-
-Create `.env.local` from `.env.example` and set Supabase values. Without Supabase env vars, the app falls back to demo data so the UI and API can run locally.
-
-## Supabase
-
-Run `supabase/schema.sql` in the Supabase SQL editor. The schema enables row-level security and scopes profile, money item, clue, and snapshot tables to the authenticated user.
-
-## Deploy
-
-Deploy the repository root directly to one Vercel project. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in Vercel environment variables.
+当前阶段只保留前端 mock 页面；API 与数据库实现后续重新设计。
