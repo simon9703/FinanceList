@@ -18,6 +18,8 @@ import {
   Umbrella,
 } from 'lucide-react'
 import {AllocationPie, LineCompareChart, StackedCostChart} from '@/components/finance/Charts'
+import {pageFrame, panelClass} from '@/components/finance/Ui'
+import {cn} from '@/lib/utils'
 import {money, percent} from '@/lib/format'
 import {calculateBuyRent, calculateInvestment, calculateLivingCost, calculateRetirement} from '@/lib/scenario/calc'
 import {mockScenario} from '@/lib/scenario/mock'
@@ -74,10 +76,10 @@ export function HomeDashboard() {
 
   return (
     <main className="min-h-screen bg-[#f7f9ff] text-slate-950">
-      <div className="mx-auto max-w-7xl px-6 py-9">
+      <div className={pageFrame}>
         <section className="grid min-h-[270px] items-center gap-8 lg:grid-cols-[1.02fr_0.98fr]">
           <div>
-            <h1 className="max-w-xl text-[44px] font-black leading-tight tracking-normal text-slate-950 lg:text-[58px]">
+            <h1 className="text-[38px] font-black leading-tight tracking-normal text-slate-950 md:text-[48px] lg:text-[58px]">
               把复杂决策，
               <br />
               变成<span className="text-indigo-600">清晰方案。</span>
@@ -133,7 +135,7 @@ export function HomeDashboard() {
           </div>
         </section>
 
-        <section className="mt-8 grid gap-0 overflow-hidden rounded-[8px] border border-slate-200 bg-white shadow-[0_18px_55px_rgba(65,80,120,0.08)] lg:grid-cols-4">
+        <section className={cn(panelClass, 'mt-8 grid gap-0 overflow-hidden lg:grid-cols-4')}>
           {modules.map((item, index) => {
             const Icon = item.icon
             return (
@@ -195,7 +197,7 @@ export function HomeDashboard() {
           </PreviewCard>
         </section>
 
-        <section className="mt-6 rounded-[8px] border border-indigo-100 bg-white p-5 shadow-[0_18px_55px_rgba(65,80,120,0.08)]">
+        <section className={cn(panelClass, 'mt-6 border-indigo-100 p-5')}>
           <div className="grid items-center gap-5 lg:grid-cols-[84px_1fr_120px]">
             <div className="grid h-20 w-20 place-items-center rounded-[8px] bg-indigo-50 text-indigo-500">
               <Sparkles size={38} />
@@ -251,7 +253,7 @@ export function HomeDashboard() {
 
 function PreviewCard({title, href, children}: {title: string; href: string; children: React.ReactNode}) {
   return (
-    <Link href={href} className="rounded-[8px] border border-slate-200 bg-white p-4 shadow-[0_18px_55px_rgba(65,80,120,0.08)] transition hover:border-indigo-300">
+    <Link href={href} className={cn(panelClass, 'p-4 transition hover:border-indigo-300')}>
       <h3 className="mb-4 flex items-center gap-2 text-base font-black">
         {title}
         <span className="grid h-4 w-4 place-items-center rounded-full border text-[10px] text-slate-400">i</span>

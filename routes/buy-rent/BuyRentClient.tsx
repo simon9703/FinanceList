@@ -4,6 +4,8 @@ import {useEffect, useMemo, useRef, useState} from 'react'
 import Link from 'next/link'
 import {ArrowRight, BadgeInfo, CheckCircle2, FileCheck2, Home, Loader2, RefreshCw, SlidersHorizontal} from 'lucide-react'
 import {LineCompareChart} from '@/components/finance/Charts'
+import {pageFrame, panelClass} from '@/components/finance/Ui'
+import {cn} from '@/lib/utils'
 import {money, percent} from '@/lib/format'
 import {calculateBuyRent} from '@/lib/scenario/calc'
 import {mockScenario} from '@/lib/scenario/mock'
@@ -86,7 +88,7 @@ export function BuyRentClient() {
 
   return (
     <main className="min-h-screen bg-[#f7f9ff] text-slate-950">
-      <div className="mx-auto max-w-7xl px-6 py-9">
+      <div className={pageFrame}>
         <section className="mb-7">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
             <div>
@@ -111,7 +113,7 @@ export function BuyRentClient() {
           </div>
         </section>
 
-        <section ref={paramRef} className="rounded-[8px] border border-slate-200 bg-white p-5 shadow-[0_18px_55px_rgba(65,80,120,0.08)]">
+        <section ref={paramRef} className={cn(panelClass, 'p-5')}>
           <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-9">
             {parameters.map((item) => {
               const value = item.key === 'years' ? input.years : Number(data[item.key])
@@ -176,7 +178,7 @@ export function BuyRentClient() {
             ]}
           />
 
-          <section className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-[0_18px_55px_rgba(65,80,120,0.08)]">
+          <section className={cn(panelClass, 'p-6')}>
             <div className="mb-4 flex items-center justify-between gap-4">
               <h2 className="flex items-center gap-2 text-xl font-black">
                 净资产对比曲线
@@ -198,7 +200,7 @@ export function BuyRentClient() {
             </p>
           </section>
 
-          <section className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-[0_18px_55px_rgba(65,80,120,0.08)]">
+          <section className={cn(panelClass, 'p-6')}>
             <h2 className="mb-5 text-xl font-black">对比总结</h2>
             <SummaryBlock
               title={`成本对比（${input.years}年）`}
@@ -279,7 +281,7 @@ function AssetPanel({
 }) {
   const colorClass = color === 'green' ? 'text-emerald-600 bg-emerald-50' : 'text-indigo-600 bg-indigo-50'
   return (
-    <section className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-[0_18px_55px_rgba(65,80,120,0.08)]">
+    <section className={cn(panelClass, 'p-6')}>
       <div className="flex items-center gap-5">
         <span className={`grid h-16 w-16 place-items-center rounded-[8px] ${colorClass}`}>{icon}</span>
         <h2 className="text-2xl font-black">{title}</h2>
@@ -361,7 +363,7 @@ function ActionCard({
 
   if (href) {
     return (
-      <Link className="flex items-center gap-5 rounded-[8px] border border-slate-200 bg-white p-6 shadow-[0_18px_55px_rgba(65,80,120,0.08)] transition hover:border-indigo-300" href={href}>
+      <Link className={cn(panelClass, 'flex items-center gap-5 p-6 transition hover:border-indigo-300')} href={href}>
         {content}
       </Link>
     )
@@ -369,7 +371,7 @@ function ActionCard({
 
   return (
     <button
-      className="flex items-center gap-5 rounded-[8px] border border-slate-200 bg-white p-6 text-left shadow-[0_18px_55px_rgba(65,80,120,0.08)] transition hover:border-indigo-300"
+      className={cn(panelClass, 'flex items-center gap-5 p-6 text-left transition hover:border-indigo-300')}
       onClick={onClick}
       type="button"
     >

@@ -30,11 +30,19 @@
 
 body {
   min-height: 100vh;
-  background: hsl(var(--background));
+  background: #f7f9ff;
   color: hsl(var(--foreground));
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+::selection {
+  background: rgba(79, 70, 229, 0.16);
+}
+
+input[type="range"] {
+  cursor: pointer;
 }

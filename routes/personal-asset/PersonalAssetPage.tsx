@@ -28,16 +28,16 @@ export function PersonalAssetPage() {
         </Panel>
         <Panel>
           <h2 className="mb-4 text-xl font-bold">风险评分与资产动线</h2>
-          <p className="mb-4 rounded-xl bg-violet-50 px-4 py-3 font-bold text-violet-700">风险评分：{output.risk_score} / 100</p>
+          <p className="mb-4 rounded-[8px] bg-violet-50 px-4 py-3 font-bold text-violet-700">风险评分：{output.risk_score} / 100</p>
           <AreaTrendChart data={output.projected_curve} />
         </Panel>
       </section>
       <InsightCard>
         <h3 className="text-xl font-bold">关联方案</h3>
         <div className="mt-3 flex flex-wrap gap-3">
-          <Link className="rounded-xl border bg-white px-4 py-2 font-bold" href="/buy-rent">买房租房：mock-buy-rent</Link>
-          <Link className="rounded-xl border bg-white px-4 py-2 font-bold" href="/investment">投资：mock-investment</Link>
-          <Link className="rounded-xl border bg-white px-4 py-2 font-bold" href="/retirement">退休：mock-retirement</Link>
+          <Link className="rounded-[8px] border bg-white px-4 py-2 font-bold" href="/buy-rent">买房租房：mock-buy-rent</Link>
+          <Link className="rounded-[8px] border bg-white px-4 py-2 font-bold" href="/investment">投资：mock-investment</Link>
+          <Link className="rounded-[8px] border bg-white px-4 py-2 font-bold" href="/retirement">退休：mock-retirement</Link>
         </div>
       </InsightCard>
     </Shell>
