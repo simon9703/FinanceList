@@ -1,3 +1,3 @@
-export function nanoid() {
-  return Math.random().toString(36).slice(2, 10)
+export function simpleId(prefix = 'id') {
+  return `${prefix}-${Date.now()}`
 }

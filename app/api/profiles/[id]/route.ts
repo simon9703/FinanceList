@@ -1,8 +1,9 @@
 import {NextResponse} from 'next/server'
-import {getProfileDetail} from '@/lib/repository'
 
-export async function GET(_request: Request, {params}: {params: {id: string}}) {
-  const data = await getProfileDetail(params.id)
-  if (!data) return NextResponse.json({error: 'Not found'}, {status: 404})
-  return NextResponse.json({data})
+export function GET() {
+  return NextResponse.json({error: 'Legacy endpoint removed. Use scenario APIs.'}, {status: 410})
+}
+
+export function POST() {
+  return NextResponse.json({error: 'Legacy endpoint removed. Use scenario APIs.'}, {status: 410})
 }
