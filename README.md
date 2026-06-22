@@ -1,35 +1,36 @@
 # FinanceList
 
-FinanceList is now a single Next.js full-stack app. It uses the App Router for pages and API routes, Tailwind CSS plus shadcn/ui-style components for the mobile-first UI, next-intl for `zh-CN` and `en`, and Supabase PostgreSQL/Auth for production data.
+FinanceList is now a scenario-driven Next.js app for finance decision demos. It uses the App Router, Tailwind CSS, Recharts, next-intl, mock data, and lightweight API routes to power module-based decision pages.
 
 ## Routes
 
-- `/profiles`
-- `/profiles/[id]`
-- `/en/profiles`
-- `/en/profiles/[id]`
-- `/api/profiles`
-- `/api/profiles/[id]`
-- `/api/clues`
-- `/api/ai/parse-clue`
+- `/`
+- `/category-finance/modules/buy_rent`
+- `/category-finance/modules/investment`
+- `/category-finance/modules/living_cost`
+- `/category-finance/modules/retirement`
+- `/category-finance/modules/personal`
+- `/api/categories`
+- `/api/ai/categories`
+
+## Scenario flow
+
+1. Mock data is the default fallback.
+2. AI generation writes final values into `scenario.data`.
+3. DB caching stores final `scenario` records.
+4. Frontend pages calculate and render from `scenario.data`.
 
 ## Development
 
 ```bash
 pnpm install
 pnpm dev
-
-before run dev, if you want to get postgres config. use vercel command update environment config
-vercel link
-vercel env pull .env.development.local
 ```
-
-Create `.env.local` from `.env.example` and set Supabase values. Without Supabase env vars, the app falls back to demo data so the UI and API can run locally.
 
 ## Supabase
 
-Run `supabase/schema.sql` in the Supabase SQL editor. The schema enables row-level security and scopes profile, money item, clue, and snapshot tables to the authenticated user.
+Run `supabase/category-schema.sql` to create the `scenarios` cache table.
 
 ## Deploy
 
-Deploy the repository root directly to one Vercel project. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in Vercel environment variables.
+Deploy the repository root directly to one Vercel project.
