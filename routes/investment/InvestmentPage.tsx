@@ -1,5 +1,7 @@
 import {CheckCircle2, Coins, Landmark, TrendingUp} from 'lucide-react'
 import {LineCompareChart} from '@/components/finance/Charts'
+import {Button} from '@/components/ui/button'
+import {Input} from '@/components/ui/input'
 import {InsightCard, KpiCard, PageHero, Panel, ScenarioTabs, Shell} from '@/components/finance/Ui'
 import {money, percent} from '@/lib/format'
 import {calculateInvestment} from '@/lib/scenario/calc'
@@ -19,7 +21,7 @@ export function InvestmentPage() {
       <PageHero title="投资协助" subtitle="输入金额与偏好，快速生成适合你的投资分配方案" />
       <section className="grid gap-5 xl:grid-cols-[0.33fr_0.67fr]">
         <Panel className="p-6">
-          <h2 className="text-xl font-black">1. 输入你的投资信息</h2>
+          <h2 className="text-xl font-bold">1. 输入你的投资信息</h2>
           <div className="mt-5">
             <ScenarioTabs items={['简单模式', '复杂模式']} active="简单模式" />
           </div>
@@ -55,19 +57,19 @@ export function InvestmentPage() {
               </div>
             </div>
           </div>
-          <button className="mt-8 w-full rounded-[8px] bg-indigo-600 px-5 py-4 text-lg font-black text-white shadow-[0_14px_30px_rgba(79,70,229,0.28)]">
+          <Button className="mt-8 w-full" size="hero" variant="finance">
             一键分配
-          </button>
+          </Button>
         </Panel>
 
         <Panel className="p-6">
           <div className="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-center">
-            <h2 className="text-xl font-black">2. 为你生成的投资分配方案</h2>
+            <h2 className="text-xl font-bold">2. 为你生成的投资分配方案</h2>
             <span className="w-fit rounded-[8px] bg-orange-50 px-4 py-2 text-sm font-bold text-orange-500">风险等级：平衡型</span>
           </div>
           <section className="grid gap-5 xl:grid-cols-[0.42fr_0.58fr]">
             <Panel className="shadow-none">
-              <h3 className="mb-4 text-lg font-black">资产配置建议</h3>
+              <h3 className="mb-4 text-lg font-bold">资产配置建议</h3>
               <div className="space-y-4">
                 {mockScenario.investment.data.assets.map((asset) => (
                   <div className="grid grid-cols-[88px_1fr_44px] items-center gap-4" key={asset.label}>
@@ -81,7 +83,7 @@ export function InvestmentPage() {
               </div>
             </Panel>
             <Panel className="shadow-none">
-              <h3 className="mb-4 text-lg font-black">10年收益推演</h3>
+              <h3 className="mb-4 text-lg font-bold">10年收益推演</h3>
               <LineCompareChart
                 data={output.portfolio_value_curve}
                 lines={[
@@ -99,7 +101,7 @@ export function InvestmentPage() {
         </Panel>
       </section>
       <InsightCard>
-        <h3 className="text-xl font-black">AI 总结建议</h3>
+        <h3 className="text-xl font-bold">AI 总结建议</h3>
         <p className="mt-2 leading-7 text-slate-600">
           在平衡风险偏好下，本组合通过全球分散配置实现长期稳健增值。预计最终资产 {money(output.final_value)}，
           累计收益 {money(output.profit)}，建议坚持定投纪律，长期持有并定期再平衡。
@@ -113,10 +115,10 @@ function Field({label, value}: {label: string; value: string}) {
   return (
     <label className="block">
       <span className="text-sm font-bold text-slate-600">{label}</span>
-      <span className="mt-2 flex items-center justify-between rounded-[8px] border border-slate-200 bg-white px-4 py-3 text-2xl font-black text-slate-950">
-        {value}
-        <small className="text-sm font-bold text-slate-400">元</small>
-      </span>
+      <div className="relative mt-2">
+        <Input className="h-14 pr-12 text-2xl font-bold text-slate-950" readOnly value={value} />
+        <small className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400">元</small>
+      </div>
     </label>
   )
 }
@@ -124,9 +126,14 @@ function Field({label, value}: {label: string; value: string}) {
 
 function Option({label, active}: {label: string; active?: boolean}) {
   return (
-    <button className={`rounded-[8px] border px-4 py-3 text-left text-sm font-bold ${active ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-white text-slate-500'}`}>
+    <Button
+      className="justify-start px-4 py-3 text-left text-sm font-bold"
+      size="auto"
+      type="button"
+      variant={active ? 'financeSoft' : 'outline'}
+    >
       {label}
-    </button>
+    </Button>
   )
 }
 
