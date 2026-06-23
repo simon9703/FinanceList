@@ -80,6 +80,15 @@ export function LivingCostPage() {
           </section>
         </div>
       </Panel>
+
+      <Panel className="mt-6 p-6">
+        <h2 className="mb-5 text-xl font-black">适合人群</h2>
+        <section className="grid gap-5 md:grid-cols-3">
+          <AudienceCard title="职场新人" text="关注生活成本与稳定储蓄，优先选择总支出更低的城市，减轻经济压力。" tone="blue" />
+          <AudienceCard title="双职工家庭" text="重视教育、医疗与通勤便利，平衡生活质量与储蓄空间。" tone="green" />
+          <AudienceCard title="海外工作者" text="关注税费、生活成本与储蓄潜力，选择长期收益更高的城市。" tone="purple" />
+        </section>
+      </Panel>
     </Shell>
   )
 }
@@ -146,5 +155,20 @@ function MiniResult({label, value, hint, tone}: {label: string; value: string; h
       <p className={`mt-2 text-xl font-black ${color}`}>{value}</p>
       <p className="mt-1 text-sm text-slate-500">{hint}</p>
     </div>
+  )
+}
+
+
+function AudienceCard({title, text, tone}: {title: string; text: string; tone: 'blue' | 'green' | 'purple'}) {
+  const color = tone === 'blue' ? 'bg-blue-50 text-blue-600' : tone === 'green' ? 'bg-emerald-50 text-emerald-600' : 'bg-violet-50 text-violet-600'
+  return (
+    <section className="rounded-[8px] border border-slate-200 bg-white p-5">
+      <span className={`mb-4 grid h-14 w-14 place-items-center rounded-full ${color}`}>
+        <Building2 size={26} />
+      </span>
+      <h3 className="text-lg font-black">{title}</h3>
+      <p className="mt-2 min-h-12 text-sm leading-6 text-slate-500">{text}</p>
+      <button className="mt-4 text-sm font-bold text-indigo-600">查看建议 →</button>
+    </section>
   )
 }
