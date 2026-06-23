@@ -72,7 +72,7 @@ type BuyRentParameterState = {
   rent: number
   rent_growth: number
   investment_return: number
-  years: 10 | 20 | 30
+  years: number
 }
 ```
 
@@ -87,7 +87,6 @@ Visible controls:
 月租金
 租金涨幅
 投资收益率
-对比年限
 ```
 
 Behavior:
@@ -264,7 +263,7 @@ export type BuyRentAIData = {
 
 ```ts
 export type BuyRentInput = {
-  years: 10 | 20 | 30
+  years: number
   risk_mode: "low" | "mid" | "high"
 }
 ```
@@ -412,20 +411,20 @@ export const mockScenario = {
     assumptions: {
       inflation: 0.02,
       interest_rate: 0.0385,
-      investment_return: 0.06,
+      investment_return: 0.04,
       rent_growth: 0.02,
       price_growth: 0.025,
     },
     data: {
-      house_price: 3000000,
-      rent: 8000,
+      house_price: 1600000,
+      rent: 3000,
       down_payment_ratio: 0.3,
       mortgage_rate: 0.0385,
       loan_years: 30,
       price_growth: 0.025,
       rent_growth: 0.02,
       maintenance_rate: 0.01,
-      investment_return: 0.06,
+      investment_return: 0.04,
     },
   },
 }
