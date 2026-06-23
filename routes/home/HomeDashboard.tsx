@@ -18,6 +18,7 @@ import {
   Umbrella,
 } from 'lucide-react'
 import {AllocationPie, LineCompareChart, StackedCostChart} from '@/components/finance/Charts'
+import {Button} from '@/components/ui/button'
 import {pageFrame, panelClass} from '@/components/finance/Ui'
 import {cn} from '@/lib/utils'
 import {money, percent} from '@/lib/format'
@@ -79,7 +80,7 @@ export function HomeDashboard() {
       <div className={pageFrame}>
         <section className="grid min-h-[270px] items-center gap-8 lg:grid-cols-[1.02fr_0.98fr]">
           <div>
-            <h1 className="text-[38px] font-black leading-tight tracking-normal text-slate-950 md:text-[48px] lg:text-[58px]">
+            <h1 className="text-[38px] font-bold leading-tight tracking-normal text-slate-950 md:text-[48px] lg:text-[58px]">
               把复杂决策，
               <br />
               变成<span className="text-indigo-600">清晰方案。</span>
@@ -204,7 +205,7 @@ export function HomeDashboard() {
             </div>
             <div>
               <div className="mb-3 flex items-center gap-3">
-                <h2 className="text-xl font-black">AI 总结</h2>
+                <h2 className="text-xl font-bold">AI 总结</h2>
                 <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-600">本周推荐</span>
               </div>
               <div className="grid gap-4 text-sm lg:grid-cols-4">
@@ -217,7 +218,7 @@ export function HomeDashboard() {
             <div className="rounded-[8px] bg-orange-50 px-4 py-5 text-center">
               <ShieldCheck className="mx-auto text-orange-500" size={24} />
               <p className="mt-2 text-sm font-bold text-orange-600">适合人群</p>
-              <p className="mt-2 text-lg font-black text-indigo-600">稳健增值型</p>
+              <p className="mt-2 text-lg font-bold text-indigo-600">稳健增值型</p>
               <p className="mt-1 text-xs text-slate-500">风险等级：中等</p>
             </div>
           </div>
@@ -228,18 +229,21 @@ export function HomeDashboard() {
             <RefreshCw size={20} />
             数据更新：{updatedAt}
           </div>
-          <button className="flex items-center justify-center gap-3 rounded-[8px] border bg-white px-5 py-4 font-bold text-slate-700 shadow-sm">
+          <Button className="h-auto justify-center gap-3 px-5 py-4 font-bold text-slate-700" size="auto" type="button" variant="outline">
             <SlidersHorizontal className="text-indigo-500" size={22} />
             参数调整
-          </button>
-          <button
-            className="flex items-center justify-center gap-3 rounded-[8px] bg-indigo-600 px-5 py-4 font-bold text-white shadow-[0_14px_30px_rgba(79,70,229,0.28)] disabled:opacity-70"
+          </Button>
+          <Button
+            className="h-auto justify-center gap-3 px-5 py-4 font-bold disabled:opacity-70"
             disabled={loading}
             onClick={regenerate}
+            size="auto"
+            type="button"
+            variant="finance"
           >
             <Sparkles size={22} />
             {loading ? '生成中...' : '一键生成个性化方案'}
-          </button>
+          </Button>
           <Link className="flex items-center justify-center gap-3 rounded-[8px] border bg-white px-5 py-4 font-bold text-slate-700 shadow-sm" href="/buy-rent">
             <FileText className="text-indigo-500" size={22} />
             查看案例
@@ -254,7 +258,7 @@ export function HomeDashboard() {
 function PreviewCard({title, href, children}: {title: string; href: string; children: React.ReactNode}) {
   return (
     <Link href={href} className={cn(panelClass, 'p-4 transition hover:border-indigo-300')}>
-      <h3 className="mb-4 flex items-center gap-2 text-base font-black">
+      <h3 className="mb-4 flex items-center gap-2 text-base font-bold">
         {title}
         <span className="grid h-4 w-4 place-items-center rounded-full border text-[10px] text-slate-400">i</span>
       </h3>

@@ -12,7 +12,7 @@ export function PersonalAssetPage() {
   return (
     <Shell>
       <section className="mb-7">
-        <h1 className="text-4xl font-black tracking-tight lg:text-5xl">个人资产总览</h1>
+        <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">个人资产总览</h1>
         <p className="mt-3 text-lg text-slate-600">展示总资产、资产结构、未来资产动线，并汇总其他模块结果。</p>
       </section>
       <section className="grid gap-5 md:grid-cols-4">

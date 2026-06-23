@@ -4,6 +4,8 @@ import {useEffect, useMemo, useRef, useState} from 'react'
 import Link from 'next/link'
 import {ArrowRight, BadgeInfo, CheckCircle2, FileCheck2, Home, Loader2, RefreshCw, SlidersHorizontal} from 'lucide-react'
 import {LineCompareChart} from '@/components/finance/Charts'
+import {Button} from '@/components/ui/button'
+import {Slider} from '@/components/ui/slider'
 import {pageFrame, panelClass} from '@/components/finance/Ui'
 import {cn} from '@/lib/utils'
 import {money, percent} from '@/lib/format'
@@ -92,7 +94,7 @@ export function BuyRentClient() {
         <section className="mb-7">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
             <div>
-              <h1 className="text-[42px] font-black tracking-normal lg:text-[52px]">
+              <h1 className="text-[42px] font-bold tracking-normal lg:text-[52px]">
                 买房 <span className="text-indigo-600">vs</span> 租房
               </h1>
               <p className="mt-3 text-xl text-slate-600">比较住房成本、资产增长与资金灵活性</p>
@@ -101,14 +103,16 @@ export function BuyRentClient() {
               <span className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-500">
                 数据源：{source === 'mock' ? 'Mock' : source === 'cache' ? 'Cache' : 'AI'}
               </span>
-              <button
-                className="inline-flex items-center gap-2 rounded-[8px] border bg-white px-4 py-2 font-bold text-slate-700 shadow-sm disabled:opacity-60"
+              <Button
+                className="gap-2 font-bold"
                 disabled={loading}
                 onClick={() => loadScenario(true)}
+                type="button"
+                variant="outline"
               >
                 {loading ? <Loader2 className="animate-spin" size={18} /> : <RefreshCw size={18} />}
                 重新生成
-              </button>
+              </Button>
             </div>
           </div>
         </section>
@@ -120,13 +124,12 @@ export function BuyRentClient() {
               return (
                 <label className="border-slate-100 md:border-r md:pr-4 md:last:border-r-0" key={item.key}>
                   <span className="block text-sm font-bold text-slate-600">{item.label}</span>
-                  <span className="mt-3 block text-lg font-black">{item.format(value)}</span>
-                  <input
-                    className="mt-4 h-1.5 w-full accent-indigo-600"
+                  <span className="mt-3 block text-lg font-bold">{item.format(value)}</span>
+                  <Slider
+                    className="mt-4"
                     max={item.max}
                     min={item.min}
                     step={item.step}
-                    type="range"
                     value={value}
                     onChange={(event) => setParameter(item.key, Number(event.target.value))}
                   />
@@ -180,11 +183,11 @@ export function BuyRentClient() {
 
           <section className={cn(panelClass, 'p-6')}>
             <div className="mb-4 flex items-center justify-between gap-4">
-              <h2 className="flex items-center gap-2 text-xl font-black">
+              <h2 className="flex items-center gap-2 text-xl font-bold">
                 净资产对比曲线
                 <span className="grid h-5 w-5 place-items-center rounded-full border text-xs text-slate-400">i</span>
               </h2>
-              <button className="rounded-[8px] border px-4 py-2 text-sm font-bold text-slate-500">当前价格</button>
+              <Button className="text-slate-500" size="sm" type="button" variant="outline">当前价格</Button>
             </div>
             <LineCompareChart
               data={output.chart}
@@ -201,7 +204,7 @@ export function BuyRentClient() {
           </section>
 
           <section className={cn(panelClass, 'p-6')}>
-            <h2 className="mb-5 text-xl font-black">对比总结</h2>
+            <h2 className="mb-5 text-xl font-bold">对比总结</h2>
             <SummaryBlock
               title={`成本对比（${input.years}年）`}
               rows={[
@@ -223,8 +226,8 @@ export function BuyRentClient() {
               href="/investment"
             >
               <span>
-                <span className="block text-lg font-black">建议</span>
-                <span className="mt-1 block text-2xl font-black">
+                <span className="block text-lg font-bold">建议</span>
+                <span className="mt-1 block text-2xl font-bold">
                   {output.summary.winner === 'rent' ? '租房 + 投资' : '买房持有'}
                 </span>
                 <span className="mt-2 block text-sm text-slate-500">
@@ -284,13 +287,13 @@ function AssetPanel({
     <section className={cn(panelClass, 'p-6')}>
       <div className="flex items-center gap-5">
         <span className={`grid h-16 w-16 place-items-center rounded-[8px] ${colorClass}`}>{icon}</span>
-        <h2 className="text-2xl font-black">{title}</h2>
+        <h2 className="text-2xl font-bold">{title}</h2>
       </div>
       <div className="mt-8 space-y-6">
         {rows.map(([label, value], index) => (
           <div key={label}>
             <p className="text-sm text-slate-500">{label}</p>
-            <p className={`mt-2 text-3xl font-black ${index === rows.length - 1 ? (color === 'green' ? 'text-emerald-600' : 'text-indigo-600') : 'text-slate-950'}`}>
+            <p className={`mt-2 text-3xl font-bold ${index === rows.length - 1 ? (color === 'green' ? 'text-emerald-600' : 'text-indigo-600') : 'text-slate-950'}`}>
               {value}
             </p>
           </div>
@@ -300,7 +303,7 @@ function AssetPanel({
         {footer.map(([label, value]) => (
           <div key={label}>
             <p className="text-xs text-slate-500">{label}</p>
-            <p className="mt-2 text-sm font-black text-slate-950">{value}</p>
+            <p className="mt-2 text-sm font-bold text-slate-950">{value}</p>
           </div>
         ))}
       </div>
@@ -370,13 +373,14 @@ function ActionCard({
   }
 
   return (
-    <button
-      className={cn(panelClass, 'flex items-center gap-5 p-6 text-left transition hover:border-indigo-300')}
+    <Button
+      className={cn(panelClass, 'flex h-auto items-center justify-start gap-5 p-6 text-left transition hover:border-indigo-300')}
       onClick={onClick}
       type="button"
+      variant="outline"
     >
       {content}
-    </button>
+    </Button>
   )
 }
 

@@ -25,7 +25,7 @@ export function AppHeader() {
             <ShieldCheck size={24} />
           </span>
           <span className="leading-tight">
-            <strong className="block text-[22px] font-black text-slate-950">财富侦探</strong>
+            <strong className="block text-[22px] font-bold text-slate-950">财富侦探</strong>
             <small className="text-[13px] font-medium text-slate-500">看清选择，掌控未来</small>
           </span>
         </Link>

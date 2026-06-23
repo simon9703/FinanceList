@@ -1,5 +1,6 @@
 import {BriefcaseBusiness, CalendarDays, CreditCard, Target} from 'lucide-react'
 import {LineCompareChart} from '@/components/finance/Charts'
+import {Input} from '@/components/ui/input'
 import {InsightCard, KpiCard, PageHero, Panel, ScenarioTabs, Shell} from '@/components/finance/Ui'
 import {money} from '@/lib/format'
 import {calculateRetirement} from '@/lib/scenario/calc'
@@ -18,9 +19,9 @@ export function RetirementPage() {
   return (
     <Shell>
       <PageHero title="退休计划" subtitle="估算退休目标、资产积累路径与退休后现金流" />
-      <section className="grid gap-5 xl:grid-cols-[0.42fr_0.58fr]">
+      <section className="grid gap-5 xl:grid-cols-[1.45fr_repeat(4,minmax(0,1fr))]">
         <Panel className="p-6">
-          <h2 className="text-xl font-black">计划参数</h2>
+          <h2 className="text-xl font-bold">计划参数</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             <Field label="当前年龄" value={`${input.current_age} 岁`} />
             <Field label="计划退休年龄" value={`${input.retirement_age} 岁`} />
@@ -34,7 +35,7 @@ export function RetirementPage() {
           <p className="mt-4 text-sm text-slate-500">所有金额均为当前币种，按年化收益率 6% 估算。</p>
         </Panel>
 
-        <section className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="grid gap-5 sm:grid-cols-2 xl:col-span-4 xl:grid-cols-4">
           <KpiCard label="退休目标金额" value={money(output.required_fund)} hint="按 25 年退休期估算" tone="green" />
           <KpiCard label="预计可退休年龄" value={`${Math.round(output.depletion_age)} 岁`} hint={`比计划晚 ${Math.max(0, Math.round(output.depletion_age) - input.retirement_age)} 年`} />
           <KpiCard label="退休后月支出" value={money(input.monthly_expense)} hint="按当前水平 70% 估算" tone="purple" />
@@ -44,7 +45,7 @@ export function RetirementPage() {
 
       <section className="mt-6 grid gap-5 xl:grid-cols-[0.58fr_0.42fr]">
         <Panel className="p-6">
-          <h2 className="mb-4 text-xl font-black">资产增长推演</h2>
+          <h2 className="mb-4 text-xl font-bold">资产增长推演</h2>
           <LineCompareChart
             data={output.yearly_curve.map((item) => ({
               year: item.age,
@@ -62,8 +63,8 @@ export function RetirementPage() {
         </Panel>
 
         <Panel className="p-6">
-          <h2 className="mb-5 text-xl font-black">不同地区退休成本（每月）</h2>
-          <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-1">
+          <h2 className="mb-5 text-xl font-bold">不同地区退休成本（每月）</h2>
+          <div className="grid gap-4 md:grid-cols-3">
             <Region icon={<Target size={30} />} title="中国大陆" value="¥15,000" tag="经济舒适" tone="green" />
             <Region icon={<CreditCard size={30} />} title="香港" value="¥23,000" tag="舒适" tone="purple" />
             <Region icon={<CalendarDays size={30} />} title="新加坡" value="¥21,000" tag="舒适" tone="orange" />
@@ -75,13 +76,13 @@ export function RetirementPage() {
       <InsightCard>
         <div className="grid gap-6 xl:grid-cols-[0.45fr_0.55fr]">
           <section>
-            <h3 className="text-xl font-black">AI 退休摘要</h3>
+            <h3 className="text-xl font-bold">AI 退休摘要</h3>
             <p className="mt-3 rounded-[8px] bg-emerald-50 px-5 py-4 font-bold leading-7 text-emerald-700">
               整体上，您的退休计划基本可行。按基准情景，可在 {Math.round(output.depletion_age)} 岁前保持现金流安全。
             </p>
           </section>
           <section>
-            <h3 className="text-xl font-black">建议调整方向</h3>
+            <h3 className="text-xl font-bold">建议调整方向</h3>
             <div className="mt-4 grid gap-4 md:grid-cols-3">
               <Advice title="若希望按计划退休" text="每月投入提高约 11%，或延后退休约 4 个月。" />
               <Advice title="增强安全边际" text="将现金流安全度提升至 1.6，建议月投 ¥9,800。" />
@@ -98,7 +99,7 @@ function Field({label, value}: {label: string; value: string}) {
   return (
     <label>
       <span className="text-sm font-bold text-slate-600">{label}</span>
-      <span className="mt-2 block rounded-[8px] border border-slate-200 bg-white px-4 py-3 text-lg font-black">{value}</span>
+      <Input className="mt-2 h-12 text-lg font-bold" readOnly value={value} />
     </label>
   )
 }
@@ -109,7 +110,7 @@ function Region({icon, title, value, tag, tone}: {icon: React.ReactNode; title: 
     <section className="rounded-[8px] border border-slate-200 bg-white p-5 text-center">
       <span className={`mx-auto grid h-16 w-16 place-items-center rounded-[8px] ${color}`}>{icon}</span>
       <p className="mt-4 font-bold text-slate-700">{title}</p>
-      <p className="mt-3 text-2xl font-black">{value}</p>
+      <p className="mt-3 text-2xl font-bold">{value}</p>
       <span className={`mt-3 inline-flex rounded-full px-4 py-1 text-sm font-bold ${color}`}>{tag}</span>
     </section>
   )
