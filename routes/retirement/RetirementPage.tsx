@@ -18,7 +18,7 @@ export function RetirementPage() {
   return (
     <Shell>
       <PageHero title="退休计划" subtitle="估算退休目标、资产积累路径与退休后现金流" />
-      <section className="grid gap-5 xl:grid-cols-[0.42fr_0.58fr]">
+      <section className="grid gap-5 xl:grid-cols-[1.45fr_repeat(4,minmax(0,1fr))]">
         <Panel className="p-6">
           <h2 className="text-xl font-black">计划参数</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
@@ -34,7 +34,7 @@ export function RetirementPage() {
           <p className="mt-4 text-sm text-slate-500">所有金额均为当前币种，按年化收益率 6% 估算。</p>
         </Panel>
 
-        <section className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="grid gap-5 sm:grid-cols-2 xl:col-span-4 xl:grid-cols-4">
           <KpiCard label="退休目标金额" value={money(output.required_fund)} hint="按 25 年退休期估算" tone="green" />
           <KpiCard label="预计可退休年龄" value={`${Math.round(output.depletion_age)} 岁`} hint={`比计划晚 ${Math.max(0, Math.round(output.depletion_age) - input.retirement_age)} 年`} />
           <KpiCard label="退休后月支出" value={money(input.monthly_expense)} hint="按当前水平 70% 估算" tone="purple" />
@@ -63,7 +63,7 @@ export function RetirementPage() {
 
         <Panel className="p-6">
           <h2 className="mb-5 text-xl font-black">不同地区退休成本（每月）</h2>
-          <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-1">
+          <div className="grid gap-4 md:grid-cols-3">
             <Region icon={<Target size={30} />} title="中国大陆" value="¥15,000" tag="经济舒适" tone="green" />
             <Region icon={<CreditCard size={30} />} title="香港" value="¥23,000" tag="舒适" tone="purple" />
             <Region icon={<CalendarDays size={30} />} title="新加坡" value="¥21,000" tag="舒适" tone="orange" />
