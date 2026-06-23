@@ -16,7 +16,7 @@ import {mockScenario} from '@/lib/scenario/mock'
 import type {BuyRentAIData, BuyRentInput, Scenario, ScenarioSource} from '@/lib/scenario/types'
 
 type ParameterConfig = {
-  key: keyof BuyRentAIData | 'years'
+  key: keyof BuyRentAIData
   label: string
   min: number
   max: number
@@ -25,17 +25,26 @@ type ParameterConfig = {
   hint: string
 }
 
+const MIN_LOAN_YEARS = 5
+const MAX_LOAN_YEARS = 30
+
 const parameters: ParameterConfig[] = [
-  {key: 'house_price', label: '房子总价', min: 1000000, max: 8000000, step: 100000, format: (v) => money(v), hint: '100万     300万     800万'},
+  {key: 'house_price', label: '房子总价', min: 100000, max: 10000000, step: 100000, format: (v) => money(v), hint: '10万     160万     1000万'},
   {key: 'down_payment_ratio', label: '首付比例', min: 0.1, max: 0.5, step: 0.01, format: (v) => percent(v, 0), hint: '10%       30%       50%'},
-  {key: 'mortgage_rate', label: '贷款利率', min: 0.02, max: 0.06, step: 0.0005, format: (v) => percent(v, 2), hint: 'LPR - 20BP'},
-  {key: 'loan_years', label: '贷款年限', min: 10, max: 40, step: 1, format: (v) => `${v} 年`, hint: '10年       30年       40年'},
-  {key: 'price_growth', label: '房价涨幅', min: -0.05, max: 0.06, step: 0.001, format: (v) => `${percent(v, 1)} / 年`, hint: '-5%       0%       6%'},
+  {key: 'mortgage_rate', label: '贷款利率', min: 0, max: 0.05, step: 0.0005, format: (v) => percent(v, 2), hint: '0%       2.5%       5%'},
+  {key: 'loan_years', label: '贷款年限', min: MIN_LOAN_YEARS, max: MAX_LOAN_YEARS, step: 1, format: (v) => `${v} 年`, hint: '5年       15年       30年'},
+  {key: 'price_growth', label: '房价涨幅', min: -0.1, max: 0.1, step: 0.001, format: (v) => `${percent(v, 1)} / 年`, hint: '-10%       0%       10%'},
   {key: 'rent', label: '月租金', min: 2000, max: 20000, step: 500, format: (v) => money(v), hint: '2千       8千       2万'},
   {key: 'rent_growth', label: '租金涨幅', min: -0.05, max: 0.06, step: 0.001, format: (v) => percent(v, 1), hint: '-5%       0%       6%'},
   {key: 'investment_return', label: '投资收益率', min: -0.12, max: 0.12, step: 0.001, format: (v) => `${percent(v, 1)} / 年`, hint: '-12%      0%      12%'},
-  {key: 'years', label: '对比年限', min: 10, max: 30, step: 10, format: (v) => `${v} 年`, hint: '10年       20年       30年'},
 ]
+
+function normalizeBuyRentData(data: BuyRentAIData): BuyRentAIData {
+  return {
+    ...data,
+    loan_years: Math.min(MAX_LOAN_YEARS, Math.max(MIN_LOAN_YEARS, data.loan_years)),
+  }
+}
 
 export function BuyRentClient() {
   const paramRef = useRef<HTMLDivElement>(null)
@@ -62,13 +71,17 @@ export function BuyRentClient() {
       })
       const json = await response.json()
       const nextScenario = json.scenario as Scenario<BuyRentAIData>
-      setScenario(nextScenario)
+      const nextData = normalizeBuyRentData(nextScenario.data)
+      setScenario({...nextScenario, data: nextData})
       setSource(json.source ?? 'mock')
-      setData(nextScenario.data)
+      setData(nextData)
+      setInput((current) => ({...current, years: nextData.loan_years}))
     } catch {
       setScenario(mockScenario.buy_rent)
       setSource('mock')
-      setData(mockScenario.buy_rent.data)
+      const fallbackData = normalizeBuyRentData(mockScenario.buy_rent.data)
+      setData(fallbackData)
+      setInput((current) => ({...current, years: fallbackData.loan_years}))
     } finally {
       setLoading(false)
     }
@@ -79,11 +92,10 @@ export function BuyRentClient() {
   }, [])
 
   function setParameter(key: ParameterConfig['key'], value: number) {
-    if (key === 'years') {
-      setInput((current) => ({...current, years: value as 10 | 20 | 30}))
-      return
-    }
     setData((current) => ({...current, [key]: value}))
+    if (key === 'loan_years') {
+      setInput((current) => ({...current, years: value}))
+    }
   }
 
   function scrollToParams() {
@@ -119,9 +131,9 @@ export function BuyRentClient() {
         </section>
 
         <section ref={paramRef} className={cn(panelClass, 'p-5')}>
-          <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-9">
+          <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-8">
             {parameters.map((item) => {
-              const value = item.key === 'years' ? input.years : Number(data[item.key])
+              const value = Number(data[item.key])
               return (
                 <label className="border-slate-100 md:border-r md:pr-4 md:last:border-r-0" key={item.key}>
                   <span className="block text-sm font-bold text-slate-600">{item.label}</span>

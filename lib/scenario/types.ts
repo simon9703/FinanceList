@@ -39,7 +39,7 @@ export type BuyRentAIData = {
 }
 
 export type BuyRentInput = {
-  years: 10 | 20 | 30
+  years: number
   risk_mode: 'low' | 'mid' | 'high'
 }
 
