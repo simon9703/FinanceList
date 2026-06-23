@@ -1,22 +1,30 @@
+'use client'
+
+import {useMemo, useState} from 'react'
 import {Building2, CheckCircle2} from 'lucide-react'
 import {StackedCostChart} from '@/components/finance/Charts'
 import {PageHero, Panel, ScenarioTabs, Shell} from '@/components/finance/Ui'
+import {PageBottom} from '@/components/finance/PageBottom'
+import {Button} from '@/components/ui/button'
 import {money} from '@/lib/format'
 import {calculateLivingCost} from '@/lib/scenario/calc'
 import {mockScenario} from '@/lib/scenario/mock'
 
 export function LivingCostPage() {
-  const output = calculateLivingCost(mockScenario.living_cost.data, {
-    city: '广州',
-    monthly_income: 18000,
-    lifestyle: 'normal',
-  })
   const cities = mockScenario.living_cost.data.cities
-  const bestCity = cities.reduce((best, city) => {
+  const [selectedCity, setSelectedCity] = useState('广州')
+  const [mode, setMode] = useState('基础版')
+  const lifestyle = mode === '基础版' ? 'normal' : 'luxury'
+  const output = calculateLivingCost(mockScenario.living_cost.data, {
+    city: selectedCity,
+    monthly_income: 18000,
+    lifestyle: lifestyle as 'normal' | 'luxury',
+  })
+  const bestCity = useMemo(() => cities.reduce((best, city) => {
     const total = city.rent + city.food + city.transport + city.tax_and_insurance + city.utilities + city.entertainment
     const bestTotal = best.rent + best.food + best.transport + best.tax_and_insurance + best.utilities + best.entertainment
     return total < bestTotal ? city : best
-  }, cities[0])
+  }, cities[0]), [cities])
 
   return (
     <Shell>
@@ -24,18 +32,18 @@ export function LivingCostPage() {
       <section className="grid gap-5 lg:grid-cols-[1fr_0.35fr]">
         <div>
           <p className="mb-3 text-sm font-bold text-slate-600">选择城市（最多选择 3 个）</p>
-          <ScenarioTabs items={cities.map((city) => city.city)} active="广州" />
+          <ScenarioTabs items={cities.map((city) => city.city)} active={selectedCity} onChange={setSelectedCity} />
         </div>
         <div>
           <p className="mb-3 text-sm font-bold text-slate-600">消费模式</p>
-          <ScenarioTabs items={['基础版', '舒适版']} active="基础版" />
+          <ScenarioTabs items={['基础版', '舒适版']} active={mode} onChange={setMode} />
         </div>
       </section>
 
       <Panel className="mt-6 p-6">
         <div className="grid gap-6 xl:grid-cols-[1fr_0.45fr]">
           <section>
-            <h2 className="mb-5 text-xl font-black">月度生活成本对比（基础版）</h2>
+            <h2 className="mb-5 text-xl font-bold">月度生活成本对比（{mode}）</h2>
             <div className="grid gap-5 md:grid-cols-3">
               {cities.map((city) => (
                 <CityCard
@@ -46,13 +54,13 @@ export function LivingCostPage() {
                   food={city.food}
                   transport={city.transport}
                   tax={city.tax_and_insurance}
-                  active={city.city === '广州'}
+                  active={city.city === selectedCity}
                 />
               ))}
             </div>
           </section>
           <section className="border-slate-200 xl:border-l xl:pl-6">
-            <h2 className="mb-5 text-xl font-black">总月度支出结构对比</h2>
+            <h2 className="mb-5 text-xl font-bold">总月度支出结构对比</h2>
             <StackedCostChart data={output.chart} />
           </section>
         </div>
@@ -65,7 +73,7 @@ export function LivingCostPage() {
               <CheckCircle2 size={32} />
             </span>
             <div>
-              <h2 className="text-xl font-black">AI 结论</h2>
+              <h2 className="text-xl font-bold">AI 结论</h2>
               <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
                 <li>综合成本：{bestCity.city} 的月度总支出最低，生活成本最具优势。</li>
                 <li>储蓄空间：当前广州储蓄率约 {output.saving_rate}%，适合长期稳健积累。</li>
@@ -82,13 +90,22 @@ export function LivingCostPage() {
       </Panel>
 
       <Panel className="mt-6 p-6">
-        <h2 className="mb-5 text-xl font-black">适合人群</h2>
+        <h2 className="mb-5 text-xl font-bold">适合人群</h2>
         <section className="grid gap-5 md:grid-cols-3">
           <AudienceCard title="职场新人" text="关注生活成本与稳定储蓄，优先选择总支出更低的城市，减轻经济压力。" tone="blue" />
           <AudienceCard title="双职工家庭" text="重视教育、医疗与通勤便利，平衡生活质量与储蓄空间。" tone="green" />
           <AudienceCard title="海外工作者" text="关注税费、生活成本与储蓄潜力，选择长期收益更高的城市。" tone="purple" />
         </section>
       </Panel>
+
+      <PageBottom
+        summaries={[
+          {title: '当前城市', text: `${selectedCity} 在 ${mode} 下月度支出约 ${money(output.monthly_total)}。`},
+          {title: '成本最低', text: `${bestCity.city} 的综合生活成本最低。`},
+          {title: '储蓄空间', text: `当前储蓄率约 ${output.saving_rate}%，适合持续积累。`},
+          {title: '城市建议', text: '结合收入机会、通勤和生活质量综合选择。'},
+        ]}
+      />
     </Shell>
   )
 }
@@ -113,7 +130,7 @@ function CityCard({
   return (
     <section className={`rounded-[8px] border p-5 ${active ? 'border-emerald-200 bg-emerald-50/30' : 'border-slate-200 bg-white'}`}>
       <div className="mb-5 flex items-center justify-between">
-        <span className="flex items-center gap-3 text-lg font-black">
+        <span className="flex items-center gap-3 text-lg font-bold">
           <Building2 className={active ? 'text-emerald-600' : 'text-indigo-500'} size={24} />
           {city}
         </span>
@@ -152,7 +169,7 @@ function MiniResult({label, value, hint, tone}: {label: string; value: string; h
   return (
     <div className="rounded-[8px] border border-slate-100 bg-white px-4 py-4 text-center">
       <p className={`text-sm font-bold ${color}`}>{label}</p>
-      <p className={`mt-2 text-xl font-black ${color}`}>{value}</p>
+      <p className={`mt-2 text-xl font-bold ${color}`}>{value}</p>
       <p className="mt-1 text-sm text-slate-500">{hint}</p>
     </div>
   )
@@ -166,9 +183,9 @@ function AudienceCard({title, text, tone}: {title: string; text: string; tone: '
       <span className={`mb-4 grid h-14 w-14 place-items-center rounded-full ${color}`}>
         <Building2 size={26} />
       </span>
-      <h3 className="text-lg font-black">{title}</h3>
+      <h3 className="text-lg font-bold">{title}</h3>
       <p className="mt-2 min-h-12 text-sm leading-6 text-slate-500">{text}</p>
-      <button className="mt-4 text-sm font-bold text-indigo-600">查看建议 →</button>
+      <Button type="button" variant="ghost" className="mt-4 h-auto p-0 text-sm font-bold text-indigo-600">查看建议 →</Button>
     </section>
   )
 }

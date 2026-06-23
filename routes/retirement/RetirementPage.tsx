@@ -1,11 +1,17 @@
-import {BriefcaseBusiness, CalendarDays, CreditCard, Target} from 'lucide-react'
+'use client'
+
+import {useState} from 'react'
+import {CalendarClock, CalendarDays, CreditCard, MapPin, PiggyBank, ShieldCheck, Target, WalletCards} from 'lucide-react'
 import {LineCompareChart} from '@/components/finance/Charts'
-import {InsightCard, KpiCard, PageHero, Panel, ScenarioTabs, Shell} from '@/components/finance/Ui'
+import {Panel, ScenarioTabs, Shell} from '@/components/finance/Ui'
+import {PageBottom} from '@/components/finance/PageBottom'
+import {Badge} from '@/components/ui/badge'
 import {money} from '@/lib/format'
 import {calculateRetirement} from '@/lib/scenario/calc'
 import {mockScenario} from '@/lib/scenario/mock'
 
 export function RetirementPage() {
+  const [region, setRegion] = useState('中国大陆')
   const input = {
     current_age: 30,
     retirement_age: 55,
@@ -14,37 +20,67 @@ export function RetirementPage() {
     monthly_expense: 15000,
   }
   const output = calculateRetirement(mockScenario.retirement.data, input)
+  const safeRatio = output.gap > 0 ? '1.42' : '1.60'
 
   return (
     <Shell>
-      <PageHero title="退休计划" subtitle="估算退休目标、资产积累路径与退休后现金流" />
+      <section className="mb-8 border-t-4 border-indigo-500 pt-8">
+        <h1 className="text-[42px] font-bold leading-tight tracking-normal text-slate-950 md:text-[56px]">退休计划</h1>
+        <p className="mt-4 text-lg font-bold text-slate-600 md:text-xl">估算退休目标、资产积累路径与退休后现金流</p>
+      </section>
+
       <section className="grid gap-5 xl:grid-cols-[1.45fr_repeat(4,minmax(0,1fr))]">
-        <Panel className="p-6">
-          <h2 className="text-xl font-black">计划参数</h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
+        <Panel className="min-h-[380px] p-6 md:p-8">
+          <h2 className="text-2xl font-bold">计划参数</h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
             <Field label="当前年龄" value={`${input.current_age} 岁`} />
             <Field label="计划退休年龄" value={`${input.retirement_age} 岁`} />
             <Field label="每月投入" value={money(input.monthly_saving)} />
             <Field label="已有资产" value={money(input.current_asset)} />
           </div>
-          <div className="mt-5">
-            <p className="mb-3 text-sm font-bold text-slate-600">居住地区</p>
-            <ScenarioTabs items={['中国大陆', '香港', '新加坡']} active="中国大陆" />
+          <div className="mt-8">
+            <p className="mb-3 flex items-center gap-2 text-sm font-bold text-slate-600">
+              <MapPin className="text-indigo-500" size={18} />
+              居住地区
+            </p>
+            <ScenarioTabs items={['中国大陆', '香港', '新加坡']} active={region} onChange={setRegion} />
           </div>
-          <p className="mt-4 text-sm text-slate-500">所有金额均为当前币种，按年化收益率 6% 估算。</p>
+          <p className="mt-6 text-sm font-bold leading-6 text-slate-500">所有金额均为当前币种，按年化收益率 6% 估算。</p>
         </Panel>
 
-        <section className="grid gap-5 sm:grid-cols-2 xl:col-span-4 xl:grid-cols-4">
-          <KpiCard label="退休目标金额" value={money(output.required_fund)} hint="按 25 年退休期估算" tone="green" />
-          <KpiCard label="预计可退休年龄" value={`${Math.round(output.depletion_age)} 岁`} hint={`比计划晚 ${Math.max(0, Math.round(output.depletion_age) - input.retirement_age)} 年`} />
-          <KpiCard label="退休后月支出" value={money(input.monthly_expense)} hint="按当前水平 70% 估算" tone="purple" />
-          <KpiCard label="现金流安全度" value={output.gap > 0 ? '1.42' : '1.60'} hint="安全（>1.2 为安全）" tone="orange" />
-        </section>
+        <RetirementMetricCard
+          icon={<PiggyBank size={20} />}
+          label="退休目标金额"
+          value={money(output.required_fund)}
+          hint="按 25 年退休期估算"
+          tone="green"
+        />
+        <RetirementMetricCard
+          icon={<CalendarClock size={20} />}
+          label="预计可退休年龄"
+          value={`${Math.round(output.depletion_age)} 岁`}
+          hint={`比计划晚 ${Math.max(0, Math.round(output.depletion_age) - input.retirement_age)} 年`}
+          tone="blue"
+        />
+        <RetirementMetricCard
+          icon={<WalletCards size={20} />}
+          label="退休后月支出"
+          value={money(input.monthly_expense)}
+          hint="按当前水平 70% 估算"
+          tone="purple"
+        />
+        <RetirementMetricCard
+          icon={<ShieldCheck size={20} />}
+          label="现金流安全度"
+          value={safeRatio}
+          hint="安全（>1.2 为安全）"
+          tone="orange"
+        />
       </section>
 
       <section className="mt-6 grid gap-5 xl:grid-cols-[0.58fr_0.42fr]">
         <Panel className="p-6">
-          <h2 className="mb-4 text-xl font-black">资产增长推演</h2>
+          <h2 className="mb-4 text-xl font-bold">资产增长推演</h2>
           <LineCompareChart
             data={output.yearly_curve.map((item) => ({
               year: item.age,
@@ -62,34 +98,24 @@ export function RetirementPage() {
         </Panel>
 
         <Panel className="p-6">
-          <h2 className="mb-5 text-xl font-black">不同地区退休成本（每月）</h2>
+          <h2 className="mb-5 text-xl font-bold">不同地区退休成本（每月）</h2>
           <div className="grid gap-4 md:grid-cols-3">
-            <Region icon={<Target size={30} />} title="中国大陆" value="¥15,000" tag="经济舒适" tone="green" />
-            <Region icon={<CreditCard size={30} />} title="香港" value="¥23,000" tag="舒适" tone="purple" />
-            <Region icon={<CalendarDays size={30} />} title="新加坡" value="¥21,000" tag="舒适" tone="orange" />
+            <Region icon={<Target size={30} />} title="中国大陆" value="¥15,000" tag="经济舒适" tone="green" active={region === '中国大陆'} />
+            <Region icon={<CreditCard size={30} />} title="香港" value="¥23,000" tag="舒适" tone="purple" active={region === '香港'} />
+            <Region icon={<CalendarDays size={30} />} title="新加坡" value="¥21,000" tag="舒适" tone="orange" active={region === '新加坡'} />
           </div>
           <p className="mt-5 text-sm text-slate-500">包含房租、饮食、交通、医疗、娱乐等基础开支。</p>
         </Panel>
       </section>
 
-      <InsightCard>
-        <div className="grid gap-6 xl:grid-cols-[0.45fr_0.55fr]">
-          <section>
-            <h3 className="text-xl font-black">AI 退休摘要</h3>
-            <p className="mt-3 rounded-[8px] bg-emerald-50 px-5 py-4 font-bold leading-7 text-emerald-700">
-              整体上，您的退休计划基本可行。按基准情景，可在 {Math.round(output.depletion_age)} 岁前保持现金流安全。
-            </p>
-          </section>
-          <section>
-            <h3 className="text-xl font-black">建议调整方向</h3>
-            <div className="mt-4 grid gap-4 md:grid-cols-3">
-              <Advice title="若希望按计划退休" text="每月投入提高约 11%，或延后退休约 4 个月。" />
-              <Advice title="增强安全边际" text="将现金流安全度提升至 1.6，建议月投 ¥9,800。" />
-              <Advice title="优化支出结构" text="控制长期支出压力，降低退休后的资金缺口。" />
-            </div>
-          </section>
-        </div>
-      </InsightCard>
+      <PageBottom
+        summaries={[
+          {title: '退休地区', text: `当前选择 ${region}，请结合医疗、房租与通胀压力评估。`},
+          {title: '退休目标', text: `目标资金约 ${money(output.required_fund)}，预计可退休年龄 ${Math.round(output.depletion_age)} 岁。`},
+          {title: '现金流', text: `退休后月支出按 ${money(input.monthly_expense)} 估算，安全度 ${safeRatio}。`},
+          {title: '调整方向', text: '可通过提高月投、延后退休或优化支出增强安全边际。'},
+        ]}
+      />
     </Shell>
   )
 }
@@ -98,33 +124,51 @@ function Field({label, value}: {label: string; value: string}) {
   return (
     <label>
       <span className="text-sm font-bold text-slate-600">{label}</span>
-      <span className="mt-2 block rounded-[8px] border border-slate-200 bg-white px-4 py-3 text-lg font-black">{value}</span>
+      <span className="mt-3 block rounded-[8px] border border-slate-200 bg-white px-5 py-4 text-xl font-bold text-slate-950 shadow-sm">{value}</span>
     </label>
   )
 }
 
-function Region({icon, title, value, tag, tone}: {icon: React.ReactNode; title: string; value: string; tag: string; tone: 'green' | 'purple' | 'orange'}) {
-  const color = tone === 'green' ? 'text-emerald-600 bg-emerald-50' : tone === 'purple' ? 'text-violet-600 bg-violet-50' : 'text-orange-600 bg-orange-50'
+function RetirementMetricCard({
+  icon,
+  label,
+  value,
+  hint,
+  tone,
+}: {
+  icon: React.ReactNode
+  label: string
+  value: string
+  hint: string
+  tone: 'green' | 'blue' | 'purple' | 'orange'
+}) {
+  const colors = {
+    green: 'bg-emerald-50 text-emerald-600',
+    blue: 'bg-blue-50 text-blue-600',
+    purple: 'bg-violet-50 text-violet-600',
+    orange: 'bg-orange-50 text-orange-600',
+  }
+
   return (
-    <section className="rounded-[8px] border border-slate-200 bg-white p-5 text-center">
-      <span className={`mx-auto grid h-16 w-16 place-items-center rounded-[8px] ${color}`}>{icon}</span>
-      <p className="mt-4 font-bold text-slate-700">{title}</p>
-      <p className="mt-3 text-2xl font-black">{value}</p>
-      <span className={`mt-3 inline-flex rounded-full px-4 py-1 text-sm font-bold ${color}`}>{tag}</span>
-    </section>
+    <Panel className="min-h-[380px] p-8">
+      <Badge className={`mb-10 inline-flex items-center gap-2 border-0 px-4 py-2 text-sm font-bold ${colors[tone]}`}>
+        {icon}
+        {label}
+      </Badge>
+      <p className="text-[34px] font-bold leading-tight tracking-tight text-slate-950 md:text-[42px]">{value}</p>
+      <p className="mt-5 text-base font-bold leading-7 text-slate-500">{hint}</p>
+    </Panel>
   )
 }
 
-function Advice({title, text}: {title: string; text: string}) {
+function Region({icon, title, value, tag, tone, active}: {icon: React.ReactNode; title: string; value: string; tag: string; tone: 'green' | 'purple' | 'orange'; active?: boolean}) {
+  const color = tone === 'green' ? 'text-emerald-600 bg-emerald-50' : tone === 'purple' ? 'text-violet-600 bg-violet-50' : 'text-orange-600 bg-orange-50'
   return (
-    <div className="flex gap-3">
-      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[8px] bg-indigo-50 text-indigo-600">
-        <BriefcaseBusiness size={20} />
-      </span>
-      <span>
-        <strong className="block text-slate-900">{title}</strong>
-        <small className="mt-1 block leading-5 text-slate-500">{text}</small>
-      </span>
-    </div>
+    <section className={`rounded-[8px] border bg-white p-5 text-center transition ${active ? 'border-indigo-300 shadow-[0_12px_30px_rgba(79,70,229,0.14)]' : 'border-slate-200'}`}>
+      <span className={`mx-auto grid h-16 w-16 place-items-center rounded-[8px] ${color}`}>{icon}</span>
+      <p className="mt-4 font-bold text-slate-700">{title}</p>
+      <p className="mt-3 text-2xl font-bold">{value}</p>
+      <Badge className={`mt-3 inline-flex rounded-full border-0 px-4 py-1 text-sm font-bold ${color}`}>{tag}</Badge>
+    </section>
   )
 }

@@ -1,7 +1,7 @@
 export const homeData = {
   totalAsset: 1500000,
   moduleCards: [
-    {key: 'buy_rent', title: '生活决策', subtitle: '比较买房租房、居住城市等生活选择', status: '租房更优'},
+    {key: 'buy_rent', title: '买房 vs 租房', subtitle: '比较买房租房、居住城市等生活选择', status: '租房更优'},
     {key: 'investment', title: '投资协助', subtitle: '生成科学资产配置方案，优化投资组合', status: '平衡型'},
     {key: 'living_cost', title: '城市成本', subtitle: '对比城市生活成本，选择最优生活地', status: '广州最低'},
     {key: 'retirement', title: '退休计划', subtitle: '规划退休目标与现金流，实现安心晚年', status: '60岁更稳'}

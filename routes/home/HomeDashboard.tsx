@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import Link from 'next/link'
 import {useMemo, useState} from 'react'
@@ -7,17 +7,15 @@ import {
   BarChart3,
   Building2,
   CheckCircle2,
-  FileText,
   Home,
   House,
+  Info,
   Landmark,
-  RefreshCw,
-  ShieldCheck,
-  SlidersHorizontal,
   Sparkles,
   Umbrella,
 } from 'lucide-react'
 import {AllocationPie, LineCompareChart, StackedCostChart} from '@/components/finance/Charts'
+import {PageBottom} from '@/components/finance/PageBottom'
 import {pageFrame, panelClass} from '@/components/finance/Ui'
 import {cn} from '@/lib/utils'
 import {money, percent} from '@/lib/format'
@@ -25,7 +23,7 @@ import {calculateBuyRent, calculateInvestment, calculateLivingCost, calculateRet
 import {mockScenario} from '@/lib/scenario/mock'
 
 const modules = [
-  {key: 'buy_rent', title: '生活决策', subtitle: '比较买房租房、居住城市等生活选择', icon: House, href: '/buy-rent'},
+  {key: 'buy_rent', title: '买房 vs 租房', subtitle: '比较买房租房、居住城市等生活选择', icon: House, href: '/buy-rent'},
   {key: 'investment', title: '投资协助', subtitle: '生成科学资产配置方案，优化投资组合', icon: BarChart3, href: '/investment'},
   {key: 'living_cost', title: '城市成本', subtitle: '对比城市生活成本，选择最优生活地', icon: Building2, href: '/living-cost'},
   {key: 'retirement', title: '退休计划', subtitle: '规划退休目标与现金流，实现安心晚年', icon: Umbrella, href: '/retirement'},
@@ -79,7 +77,7 @@ export function HomeDashboard() {
       <div className={pageFrame}>
         <section className="grid min-h-[270px] items-center gap-8 lg:grid-cols-[1.02fr_0.98fr]">
           <div>
-            <h1 className="text-[38px] font-black leading-tight tracking-normal text-slate-950 md:text-[48px] lg:text-[58px]">
+            <h1 className="text-[38px] font-bold leading-tight tracking-normal text-slate-950 md:text-[48px] lg:text-[58px]">
               把复杂决策，
               <br />
               变成<span className="text-indigo-600">清晰方案。</span>
@@ -197,55 +195,17 @@ export function HomeDashboard() {
           </PreviewCard>
         </section>
 
-        <section className={cn(panelClass, 'mt-6 border-indigo-100 p-5')}>
-          <div className="grid items-center gap-5 lg:grid-cols-[84px_1fr_120px]">
-            <div className="grid h-20 w-20 place-items-center rounded-[8px] bg-indigo-50 text-indigo-500">
-              <Sparkles size={38} />
-            </div>
-            <div>
-              <div className="mb-3 flex items-center gap-3">
-                <h2 className="text-xl font-black">AI 总结</h2>
-                <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-600">本周推荐</span>
-              </div>
-              <div className="grid gap-4 text-sm lg:grid-cols-4">
-                <SummaryItem title="生活决策" text="租房更优，5 年可节省约 45.2 万，同时保留资金灵活性。" />
-                <SummaryItem title="投资建议" text={`平衡型组合预期年化收益 ${percent(outputs.investment.expected_return)}，适合长期稳健增长。`} />
-                <SummaryItem title="城市选择" text="广州生活成本最低，性价比更高。" />
-                <SummaryItem title="退休规划" text="建议 60 岁退休，可实现更充足的退休资产。" />
-              </div>
-            </div>
-            <div className="rounded-[8px] bg-orange-50 px-4 py-5 text-center">
-              <ShieldCheck className="mx-auto text-orange-500" size={24} />
-              <p className="mt-2 text-sm font-bold text-orange-600">适合人群</p>
-              <p className="mt-2 text-lg font-black text-indigo-600">稳健增值型</p>
-              <p className="mt-1 text-xs text-slate-500">风险等级：中等</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-6 grid gap-4 lg:grid-cols-[1.25fr_0.75fr_1fr_0.9fr]">
-          <div className="flex items-center gap-3 rounded-[8px] border bg-white px-5 py-4 text-slate-500 shadow-sm">
-            <RefreshCw size={20} />
-            数据更新：{updatedAt}
-          </div>
-          <button className="flex items-center justify-center gap-3 rounded-[8px] border bg-white px-5 py-4 font-bold text-slate-700 shadow-sm">
-            <SlidersHorizontal className="text-indigo-500" size={22} />
-            参数调整
-          </button>
-          <button
-            className="flex items-center justify-center gap-3 rounded-[8px] bg-indigo-600 px-5 py-4 font-bold text-white shadow-[0_14px_30px_rgba(79,70,229,0.28)] disabled:opacity-70"
-            disabled={loading}
-            onClick={regenerate}
-          >
-            <Sparkles size={22} />
-            {loading ? '生成中...' : '一键生成个性化方案'}
-          </button>
-          <Link className="flex items-center justify-center gap-3 rounded-[8px] border bg-white px-5 py-4 font-bold text-slate-700 shadow-sm" href="/buy-rent">
-            <FileText className="text-indigo-500" size={22} />
-            查看案例
-            <ArrowRight size={18} />
-          </Link>
-        </section>
+        <PageBottom
+          updatedAt={updatedAt}
+          loading={loading}
+          onGenerate={regenerate}
+          summaries={[
+            {title: '买房 vs 租房', text: '租房更优，5 年可节省约 45.2 万，同时保留资金灵活性。'},
+            {title: '投资建议', text: `平衡型组合预期年化收益 ${percent(outputs.investment.expected_return)}，适合长期稳健增长。`},
+            {title: '城市选择', text: '广州生活成本最低，性价比更高。'},
+            {title: '退休规划', text: '建议 60 岁退休，可实现更充足的退休资产。'},
+          ]}
+        />
       </div>
     </main>
   )
@@ -254,9 +214,9 @@ export function HomeDashboard() {
 function PreviewCard({title, href, children}: {title: string; href: string; children: React.ReactNode}) {
   return (
     <Link href={href} className={cn(panelClass, 'p-4 transition hover:border-indigo-300')}>
-      <h3 className="mb-4 flex items-center gap-2 text-base font-black">
+      <h3 className="mb-4 flex items-center gap-2 text-base font-bold">
         {title}
-        <span className="grid h-4 w-4 place-items-center rounded-full border text-[10px] text-slate-400">i</span>
+        <Info className="text-slate-400" size={16} aria-label="信息" />
       </h3>
       {children}
     </Link>
@@ -272,14 +232,3 @@ function MetricRow({label, valueA, valueB, green}: {label: string; valueA: strin
     </div>
   )
 }
-
-function SummaryItem({title, text}: {title: string; text: string}) {
-  return (
-    <div className="border-slate-200 lg:border-r lg:pr-4 lg:last:border-r-0">
-      <p className="font-bold text-slate-900">{title}</p>
-      <p className="mt-1 leading-6 text-slate-500">{text}</p>
-    </div>
-  )
-}
-
-
