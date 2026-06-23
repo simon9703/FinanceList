@@ -1,9 +1,13 @@
-﻿'use client'
+'use client'
 
 import {useEffect, useMemo, useRef, useState} from 'react'
 import Link from 'next/link'
-import {ArrowRight, BadgeInfo, CheckCircle2, FileCheck2, Home, Loader2, RefreshCw, SlidersHorizontal} from 'lucide-react'
+import {ArrowRight, BadgeInfo, CheckCircle2, Home, Info, Loader2, RefreshCw, SlidersHorizontal} from 'lucide-react'
 import {LineCompareChart} from '@/components/finance/Charts'
+import {PageBottom} from '@/components/finance/PageBottom'
+import {Badge} from '@/components/ui/badge'
+import {Button} from '@/components/ui/button'
+import {Slider} from '@/components/ui/slider'
 import {pageFrame, panelClass} from '@/components/finance/Ui'
 import {cn} from '@/lib/utils'
 import {money, percent} from '@/lib/format'
@@ -26,10 +30,10 @@ const parameters: ParameterConfig[] = [
   {key: 'down_payment_ratio', label: '首付比例', min: 0.1, max: 0.5, step: 0.01, format: (v) => percent(v, 0), hint: '10%       30%       50%'},
   {key: 'mortgage_rate', label: '贷款利率', min: 0.02, max: 0.06, step: 0.0005, format: (v) => percent(v, 2), hint: 'LPR - 20BP'},
   {key: 'loan_years', label: '贷款年限', min: 10, max: 40, step: 1, format: (v) => `${v} 年`, hint: '10年       30年       40年'},
-  {key: 'price_growth', label: '房价涨幅', min: 0, max: 0.06, step: 0.001, format: (v) => `${percent(v, 1)} / 年`, hint: '0%        2.5%        6%'},
+  {key: 'price_growth', label: '房价涨幅', min: -0.05, max: 0.06, step: 0.001, format: (v) => `${percent(v, 1)} / 年`, hint: '-5%       0%       6%'},
   {key: 'rent', label: '月租金', min: 2000, max: 20000, step: 500, format: (v) => money(v), hint: '2千       8千       2万'},
-  {key: 'rent_growth', label: '租金涨幅', min: 0, max: 0.06, step: 0.001, format: (v) => percent(v, 1), hint: '0%        2%        6%'},
-  {key: 'investment_return', label: '投资收益率', min: 0.02, max: 0.12, step: 0.001, format: (v) => `${percent(v, 1)} / 年`, hint: '2%        6%        12%'},
+  {key: 'rent_growth', label: '租金涨幅', min: -0.05, max: 0.06, step: 0.001, format: (v) => percent(v, 1), hint: '-5%       0%       6%'},
+  {key: 'investment_return', label: '投资收益率', min: -0.12, max: 0.12, step: 0.001, format: (v) => `${percent(v, 1)} / 年`, hint: '-12%      0%      12%'},
   {key: 'years', label: '对比年限', min: 10, max: 30, step: 10, format: (v) => `${v} 年`, hint: '10年       20年       30年'},
 ]
 
@@ -92,23 +96,24 @@ export function BuyRentClient() {
         <section className="mb-7">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
             <div>
-              <h1 className="text-[42px] font-black tracking-normal lg:text-[52px]">
+              <h1 className="text-[42px] font-bold tracking-normal lg:text-[52px]">
                 买房 <span className="text-indigo-600">vs</span> 租房
               </h1>
               <p className="mt-3 text-xl text-slate-600">比较住房成本、资产增长与资金灵活性</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <span className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-500">
+              <Badge className="rounded-full border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-500">
                 数据源：{source === 'mock' ? 'Mock' : source === 'cache' ? 'Cache' : 'AI'}
-              </span>
-              <button
-                className="inline-flex items-center gap-2 rounded-[8px] border bg-white px-4 py-2 font-bold text-slate-700 shadow-sm disabled:opacity-60"
+              </Badge>
+              <Button
+                variant="outline"
+                className="rounded-[8px] bg-white px-4 py-2 font-bold text-slate-700 shadow-sm"
                 disabled={loading}
                 onClick={() => loadScenario(true)}
               >
                 {loading ? <Loader2 className="animate-spin" size={18} /> : <RefreshCw size={18} />}
                 重新生成
-              </button>
+              </Button>
             </div>
           </div>
         </section>
@@ -120,13 +125,12 @@ export function BuyRentClient() {
               return (
                 <label className="border-slate-100 md:border-r md:pr-4 md:last:border-r-0" key={item.key}>
                   <span className="block text-sm font-bold text-slate-600">{item.label}</span>
-                  <span className="mt-3 block text-lg font-black">{item.format(value)}</span>
-                  <input
-                    className="mt-4 h-1.5 w-full accent-indigo-600"
+                  <span className="mt-3 block text-lg font-bold">{item.format(value)}</span>
+                  <Slider
+                    className="mt-4"
                     max={item.max}
                     min={item.min}
                     step={item.step}
-                    type="range"
                     value={value}
                     onChange={(event) => setParameter(item.key, Number(event.target.value))}
                   />
@@ -180,11 +184,11 @@ export function BuyRentClient() {
 
           <section className={cn(panelClass, 'p-6')}>
             <div className="mb-4 flex items-center justify-between gap-4">
-              <h2 className="flex items-center gap-2 text-xl font-black">
+              <h2 className="flex items-center gap-2 text-xl font-bold">
                 净资产对比曲线
-                <span className="grid h-5 w-5 place-items-center rounded-full border text-xs text-slate-400">i</span>
+                <Info className="text-slate-400" size={20} aria-label="信息" />
               </h2>
-              <button className="rounded-[8px] border px-4 py-2 text-sm font-bold text-slate-500">当前价格</button>
+              <Button type="button" variant="outline" className="rounded-[8px] px-4 py-2 text-sm font-bold text-slate-500">当前价格</Button>
             </div>
             <LineCompareChart
               data={output.chart}
@@ -201,7 +205,7 @@ export function BuyRentClient() {
           </section>
 
           <section className={cn(panelClass, 'p-6')}>
-            <h2 className="mb-5 text-xl font-black">对比总结</h2>
+            <h2 className="mb-5 text-xl font-bold">对比总结</h2>
             <SummaryBlock
               title={`成本对比（${input.years}年）`}
               rows={[
@@ -223,8 +227,8 @@ export function BuyRentClient() {
               href="/investment"
             >
               <span>
-                <span className="block text-lg font-black">建议</span>
-                <span className="mt-1 block text-2xl font-black">
+                <span className="block text-lg font-bold">建议</span>
+                <span className="mt-1 block text-2xl font-bold">
                   {output.summary.winner === 'rent' ? '租房 + 投资' : '买房持有'}
                 </span>
                 <span className="mt-2 block text-sm text-slate-500">
@@ -236,29 +240,16 @@ export function BuyRentClient() {
           </section>
         </section>
 
-        <section className="mt-6 grid gap-5 lg:grid-cols-3">
-          <ActionCard
-            icon={<SlidersHorizontal size={34} />}
-            title="参数调整"
-            text="调整关键参数，查看对结果的影响"
-            button="调整参数"
-            onClick={scrollToParams}
-          />
-          <ActionCard
-            icon={<RefreshCw size={34} />}
-            title="场景切换"
-            text="切换不同场景，找到最适合你的方案"
-            button="选择场景"
-            onClick={() => loadScenario(true)}
-          />
-          <ActionCard
-            icon={<FileCheck2 size={34} />}
-            title="查看案例"
-            text="参考真实案例，获取更多决策灵感"
-            button="查看案例"
-            href="/"
-          />
-        </section>
+        <PageBottom
+          loading={loading}
+          onGenerate={() => loadScenario(true)}
+          summaries={[
+            {title: '买房资产', text: `${input.years} 年内买房净资产约 ${money(finalChartPoint.buy)}，适合重视稳定居住的人群。`},
+            {title: '租房投资', text: `租房投资资产约 ${money(finalChartPoint.rent)}，资金灵活性评分 ${output.rent.liquidity_score}。`},
+            {title: '成本差额', text: `买房与租房总成本差额约 ${money(output.buy.total_cost - output.rent.total_cost)}。`},
+            {title: '当前建议', text: output.summary.winner === 'rent' ? '当前参数下租房并投资更优。' : '当前参数下买房持有更优。'},
+          ]}
+        />
 
         <p className="mt-5 text-center text-sm text-slate-400">本测算结果仅供参考，不构成任何投资或财务建议，请结合自身情况谨慎决策。</p>
       </div>
@@ -284,13 +275,13 @@ function AssetPanel({
     <section className={cn(panelClass, 'p-6')}>
       <div className="flex items-center gap-5">
         <span className={`grid h-16 w-16 place-items-center rounded-[8px] ${colorClass}`}>{icon}</span>
-        <h2 className="text-2xl font-black">{title}</h2>
+        <h2 className="text-2xl font-bold">{title}</h2>
       </div>
       <div className="mt-8 space-y-6">
         {rows.map(([label, value], index) => (
           <div key={label}>
             <p className="text-sm text-slate-500">{label}</p>
-            <p className={`mt-2 text-3xl font-black ${index === rows.length - 1 ? (color === 'green' ? 'text-emerald-600' : 'text-indigo-600') : 'text-slate-950'}`}>
+            <p className={`mt-2 text-3xl font-bold ${index === rows.length - 1 ? (color === 'green' ? 'text-emerald-600' : 'text-indigo-600') : 'text-slate-950'}`}>
               {value}
             </p>
           </div>
@@ -300,7 +291,7 @@ function AssetPanel({
         {footer.map(([label, value]) => (
           <div key={label}>
             <p className="text-xs text-slate-500">{label}</p>
-            <p className="mt-2 text-sm font-black text-slate-950">{value}</p>
+            <p className="mt-2 text-sm font-bold text-slate-950">{value}</p>
           </div>
         ))}
       </div>
@@ -331,53 +322,3 @@ function SummaryBlock({title, rows}: {title: string; rows: [string, string, stri
     </div>
   )
 }
-
-function ActionCard({
-  icon,
-  title,
-  text,
-  button,
-  href,
-  onClick,
-}: {
-  icon: React.ReactNode
-  title: string
-  text: string
-  button: string
-  href?: string
-  onClick?: () => void
-}) {
-  const content = (
-    <>
-      <span className="grid h-16 w-16 shrink-0 place-items-center rounded-[8px] bg-indigo-50 text-indigo-600">{icon}</span>
-      <span>
-        <strong className="block text-xl">{title}</strong>
-        <span className="mt-2 block text-sm text-slate-500">{text}</span>
-        <span className="mt-4 inline-flex items-center gap-2 rounded-[8px] border px-4 py-2 text-sm font-bold text-indigo-600">
-          {button}
-          <ArrowRight size={16} />
-        </span>
-      </span>
-    </>
-  )
-
-  if (href) {
-    return (
-      <Link className={cn(panelClass, 'flex items-center gap-5 p-6 transition hover:border-indigo-300')} href={href}>
-        {content}
-      </Link>
-    )
-  }
-
-  return (
-    <button
-      className={cn(panelClass, 'flex items-center gap-5 p-6 text-left transition hover:border-indigo-300')}
-      onClick={onClick}
-      type="button"
-    >
-      {content}
-    </button>
-  )
-}
-
-

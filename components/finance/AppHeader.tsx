@@ -7,11 +7,11 @@ import {cn} from '@/lib/utils'
 
 const nav = [
   ['/', '首页'],
+  ['/buy-rent', '买房 vs 租房'],
   ['/investment', '投资协助'],
   ['/living-cost', '城市成本'],
   ['/retirement', '退休计划'],
-  ['/buy-rent', '案例库'],
-  ['/personal-asset', '知识库'],
+  ['/personal-asset', '个人中心'],
 ]
 
 export function AppHeader() {
@@ -25,7 +25,7 @@ export function AppHeader() {
             <ShieldCheck size={24} />
           </span>
           <span className="leading-tight">
-            <strong className="block text-[22px] font-black text-slate-950">财富侦探</strong>
+            <strong className="block text-[22px] font-bold text-slate-950">财富侦探</strong>
             <small className="text-[13px] font-medium text-slate-500">看清选择，掌控未来</small>
           </span>
         </Link>

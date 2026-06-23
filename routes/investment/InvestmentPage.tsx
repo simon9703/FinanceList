@@ -1,17 +1,29 @@
+'use client'
+
+import {useMemo, useState} from 'react'
 import {CheckCircle2, Coins, Landmark, TrendingUp} from 'lucide-react'
 import {LineCompareChart} from '@/components/finance/Charts'
-import {InsightCard, KpiCard, PageHero, Panel, ScenarioTabs, Shell} from '@/components/finance/Ui'
+import {KpiCard, PageHero, Panel, ScenarioTabs, Shell} from '@/components/finance/Ui'
+import {PageBottom} from '@/components/finance/PageBottom'
+import {Badge} from '@/components/ui/badge'
+import {Button} from '@/components/ui/button'
+import {Input} from '@/components/ui/input'
+import {Slider} from '@/components/ui/slider'
 import {money, percent} from '@/lib/format'
 import {calculateInvestment} from '@/lib/scenario/calc'
 import {mockScenario} from '@/lib/scenario/mock'
 
 export function InvestmentPage() {
-  const input = {
-    initial_amount: 100000,
-    monthly_invest: 3000,
-    risk_level: 'medium' as const,
+  const [mode, setMode] = useState('简单模式')
+  const [method, setMethod] = useState<'monthly' | 'once'>('monthly')
+  const [risk, setRisk] = useState(50)
+  const [amount, setAmount] = useState(100000)
+  const input = useMemo(() => ({
+    initial_amount: amount,
+    monthly_invest: method === 'monthly' ? 3000 : 0,
+    risk_level: risk < 34 ? 'low' as const : risk > 66 ? 'high' as const : 'medium' as const,
     horizon: 10,
-  }
+  }), [amount, method, risk])
   const output = calculateInvestment(mockScenario.investment.data, input)
 
   return (
@@ -19,24 +31,22 @@ export function InvestmentPage() {
       <PageHero title="投资协助" subtitle="输入金额与偏好，快速生成适合你的投资分配方案" />
       <section className="grid gap-5 xl:grid-cols-[0.33fr_0.67fr]">
         <Panel className="p-6">
-          <h2 className="text-xl font-black">1. 输入你的投资信息</h2>
+          <h2 className="text-xl font-bold">1. 输入你的投资信息</h2>
           <div className="mt-5">
-            <ScenarioTabs items={['简单模式', '复杂模式']} active="简单模式" />
+            <ScenarioTabs items={['简单模式', '复杂模式']} active={mode} onChange={setMode} />
           </div>
           <div className="mt-6 space-y-5">
-            <Field label="投资金额" value={money(input.initial_amount)} />
+            <Field label="投资金额" value={amount} onChange={setAmount} />
             <div>
               <p className="mb-3 text-sm font-bold text-slate-600">投资方式</p>
               <div className="grid grid-cols-2 gap-3">
-                <Option active label="定投（每月投入）" />
-                <Option label="一次性买入" />
+                <Option active={method === 'monthly'} label="定投（每月投入）" onClick={() => setMethod('monthly')} />
+                <Option active={method === 'once'} label="一次性买入" onClick={() => setMethod('once')} />
               </div>
             </div>
             <div>
               <p className="mb-3 text-sm font-bold text-slate-600">风险偏好</p>
-              <div className="h-2 rounded-full bg-gradient-to-r from-emerald-400 via-amber-300 to-rose-400">
-                <div className="ml-[48%] h-5 w-5 -translate-y-1.5 rounded-full border-4 border-white bg-white shadow-md" />
-              </div>
+              <Slider min={0} max={100} step={1} value={risk} onChange={(event) => setRisk(Number(event.target.value))} className="bg-gradient-to-r from-emerald-400 via-amber-300 to-rose-400" />
               <div className="mt-3 flex justify-between text-sm text-slate-500">
                 <span>保守</span>
                 <span>平衡</span>
@@ -47,27 +57,27 @@ export function InvestmentPage() {
               <p className="mb-3 text-sm font-bold text-slate-600">可投资产</p>
               <div className="flex flex-wrap gap-3">
                 {mockScenario.investment.data.assets.map((asset) => (
-                  <span className="inline-flex items-center gap-2 rounded-[8px] border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-bold text-slate-700" key={asset.label}>
+                  <Badge className="inline-flex items-center gap-2 rounded-[8px] border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-bold text-slate-700" key={asset.label}>
                     <CheckCircle2 className="text-indigo-600" size={16} />
                     {asset.label}
-                  </span>
+                  </Badge>
                 ))}
               </div>
             </div>
           </div>
-          <button className="mt-8 w-full rounded-[8px] bg-indigo-600 px-5 py-4 text-lg font-black text-white shadow-[0_14px_30px_rgba(79,70,229,0.28)]">
+          <Button className="mt-8 h-auto w-full rounded-[8px] bg-indigo-600 px-5 py-4 text-lg font-bold text-white shadow-[0_14px_30px_rgba(79,70,229,0.28)]">
             一键分配
-          </button>
+          </Button>
         </Panel>
 
         <Panel className="p-6">
           <div className="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-center">
-            <h2 className="text-xl font-black">2. 为你生成的投资分配方案</h2>
-            <span className="w-fit rounded-[8px] bg-orange-50 px-4 py-2 text-sm font-bold text-orange-500">风险等级：平衡型</span>
+            <h2 className="text-xl font-bold">2. 为你生成的投资分配方案</h2>
+            <Badge className="w-fit border-0 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-500">风险等级：{risk < 34 ? '保守型' : risk > 66 ? '进取型' : '平衡型'}</Badge>
           </div>
           <section className="grid gap-5 xl:grid-cols-[0.42fr_0.58fr]">
             <Panel className="shadow-none">
-              <h3 className="mb-4 text-lg font-black">资产配置建议</h3>
+              <h3 className="mb-4 text-lg font-bold">资产配置建议</h3>
               <div className="space-y-4">
                 {mockScenario.investment.data.assets.map((asset) => (
                   <div className="grid grid-cols-[88px_1fr_44px] items-center gap-4" key={asset.label}>
@@ -81,13 +91,10 @@ export function InvestmentPage() {
               </div>
             </Panel>
             <Panel className="shadow-none">
-              <h3 className="mb-4 text-lg font-black">10年收益推演</h3>
+              <h3 className="mb-4 text-lg font-bold">10年收益推演</h3>
               <LineCompareChart
                 data={output.portfolio_value_curve}
-                lines={[
-                  {key: 'value', name: '定投（每月投入）', color: '#3b82f6'},
-                  {key: 'optimistic', name: '一次性买入', color: '#8b5cf6'},
-                ]}
+                lines={[{key: 'value', name: method === 'monthly' ? '定投（每月投入）' : '一次性买入', color: '#3b82f6'}, {key: 'optimistic', name: '乐观情景', color: '#8b5cf6'}]}
               />
             </Panel>
           </section>
@@ -98,36 +105,32 @@ export function InvestmentPage() {
           </section>
         </Panel>
       </section>
-      <InsightCard>
-        <h3 className="text-xl font-black">AI 总结建议</h3>
-        <p className="mt-2 leading-7 text-slate-600">
-          在平衡风险偏好下，本组合通过全球分散配置实现长期稳健增值。预计最终资产 {money(output.final_value)}，
-          累计收益 {money(output.profit)}，建议坚持定投纪律，长期持有并定期再平衡。
-        </p>
-      </InsightCard>
+      <PageBottom
+        summaries={[
+          {title: '投资偏好', text: `当前为 ${mode}，风险偏好 ${risk < 34 ? '保守' : risk > 66 ? '进取' : '平衡'}。`},
+          {title: '投入方式', text: method === 'monthly' ? '采用每月定投，适合分散择时风险。' : '采用一次性买入，适合资金已就位的配置。'},
+          {title: '收益预估', text: `预计最终资产 ${money(output.final_value)}，累计收益 ${money(output.profit)}。`},
+          {title: '执行建议', text: '建议坚持长期持有并定期再平衡。'},
+        ]}
+      />
     </Shell>
   )
 }
 
-function Field({label, value}: {label: string; value: string}) {
+function Field({label, value, onChange}: {label: string; value: number; onChange: (value: number) => void}) {
   return (
     <label className="block">
       <span className="text-sm font-bold text-slate-600">{label}</span>
-      <span className="mt-2 flex items-center justify-between rounded-[8px] border border-slate-200 bg-white px-4 py-3 text-2xl font-black text-slate-950">
-        {value}
+      <span className="mt-2 flex items-center justify-between gap-3 rounded-[8px] border border-slate-200 bg-white px-4 py-3 text-2xl font-bold text-slate-950">
+        <Input value={value} type="number" min={0} step={1000} onChange={(event) => onChange(Number(event.target.value))} className="h-auto border-0 p-0 text-2xl font-bold shadow-none focus-visible:ring-0" />
         <small className="text-sm font-bold text-slate-400">元</small>
       </span>
     </label>
   )
 }
 
-
-function Option({label, active}: {label: string; active?: boolean}) {
-  return (
-    <button className={`rounded-[8px] border px-4 py-3 text-left text-sm font-bold ${active ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-white text-slate-500'}`}>
-      {label}
-    </button>
-  )
+function Option({label, active, onClick}: {label: string; active?: boolean; onClick: () => void}) {
+  return <Button type="button" variant="outline" onClick={onClick} className={`h-auto rounded-[8px] px-4 py-3 text-left text-sm font-bold ${active ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-white text-slate-500'}`}>{label}</Button>
 }
 
 function AssetIcon({label}: {label: string}) {
